@@ -5,10 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm app.js",
+    "start": "node app.js",
     "start-server": "node app.js"
   },
-  "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.19.4"
