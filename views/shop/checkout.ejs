@@ -1,0 +1,180 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/navigation.ejs') %>
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/checkout_bg.jpg">
+    <div class="container"><!-- STRART CONTAINER -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title">
+            		<h1>Checkout</h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Checkout</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- END CONTAINER-->
+</div>
+<div class="section">
+	<div class="container">
+        <div class="row">
+        	<div class="col-12">
+            	<div class="medium_divider clearfix"></div>
+            </div>
+        </div>
+        <div class="row">
+            <% if(messages.error) { %>
+                <span class="text-red-500 text-sm"><%= messages.error %></span>
+            <% } %>
+        	<div class="col-lg-6">
+            	<div class="heading_s1">
+            		<h4>Billing Details</h4>
+                </div>
+                <form class="billing-info-wrap row" action="/orders" method="post">	
+                    <div class="form-group col-md-6">
+                        <input type="text" required class="form-control" name="name" placeholder="Name *">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input class="form-control" required type="text" name="mobileNumber" placeholder="Phone *">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input class="form-control" required type="text" name="email" placeholder="Email address *">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="chek-form">
+                            <div class="custome-checkbox">
+                                <input class="form-check-input" type="checkbox" value="pickup" name="ordertype" id="createaccount">
+                                <label class="form-check-label label_info" for="createaccount"><span>Pickup?</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group create-account col-md-12" id="create_account">
+                        <div class="chek-form">
+                            <div class="custome-radio">
+                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_at_counter" id="pay_at_counter">
+                                <label class="form-radio-label label_info" for="pickupType"><span>Pay at counter</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group create-account col-md-12" id="create_account">
+                        <div class="chek-form">
+                            <div class="custome-radio">
+                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_now" id="pay_now">
+                                <label class="form-radio-label label_info" for="pickupType"><span>Pay Now</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ship_detail col-md-12 form-group">
+                    	<div class="chek-form">
+                            <div class="custome-checkbox">
+                                <input class="form-check-input" type="checkbox" value="delivery" name="ordertype" id="differentaddress">
+                                <label class="form-check-label label_info" for="differentaddress"><span>Delivery</span></label>
+                            </div>
+                        </div>
+                    </div>
+                   	<div class="different_address col-md-12" id="different_address">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="address" placeholder="Street name & Number *">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="city" placeholder="Town or City Area *">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="postcode" placeholder="Postcode, Block, Intercom, Where to Park *">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-default">
+                            Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <div class="order_review">
+                    <div class="heading_s1">
+                        <h4>Your Orders</h4>
+                    </div>
+                    <div class="table-responsive order_table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% total = 0 %>
+                                <% for(let pizza of Object.values(session.cart.items)) {%>
+                                    <% total = total + pizza.item.price*pizza.qty %>
+                                <tr>
+                                    <td><%= pizza.item.itemName %> <span class="product-qty">x <%= pizza.qty %></span></td>
+                                    <td>$<%= pizza.item.price * pizza.qty %></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <td class="product-subtotal">$<%= total.toFixed(2) %></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popup" style="display:none;">
+    <div class="heading_s1">
+        <h4>DELIVERY AVAILABLE</h4>
+    </div>
+    <div class="payment_option">
+        <div class="custome-radio">
+            <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" value="option3" checked="">
+            <label class="form-check-label" for="exampleRadios3">Direct Bank Transfer</label>
+            <p data-method="option3" class="payment-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration. </p>
+        </div>
+        <div class="custome-radio">
+            <input class="form-check-input" type="radio" name="payment_option" id="exampleRadios4" value="option4">
+            <label class="form-check-label" for="exampleRadios4">Check Payment</label>
+        </div>
+        <div class="custome-radio">
+            <input class="form-check-input" type="radio" name="payment_option" id="exampleRadios5" value="option5">
+            <label class="form-check-label" for="exampleRadios5">Paypal</label>
+        </div>
+    </div>
+</div>
+<%- include('../includes/foot.ejs') %>
+<%- include('../includes/end.ejs') %>
+
+
+<script type="text/javascript">
+    var options = {
+        type: "html",
+        htmlSelector: "#popup"
+    };
+    $('input[type="checkbox"]').on('change', function() {
+    $('input[type="checkbox"]').not(this).prop('checked', false);
+
+    var createaccount = document.getElementById("createaccount");
+    var create_account = document.getElementById("create_account");
+    if (createaccount.checked == true){        
+        create_account.style.display = "block";
+    } else {
+        create_account.style.display = "none";
+    }
+    var differentaddress = document.getElementById("differentaddress");
+    var different_address = document.getElementById("different_address");
+
+   
+    if (differentaddress.checked == true){
+        $(this).simplePopup(options);
+        different_address.style.display = "block";
+    } else {
+        different_address.style.display = "none";
+    }
+});
+</script>

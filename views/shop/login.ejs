@@ -1,0 +1,68 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/item.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>  
+        <div class="wrapper">            
+            <div class="checkout-page-area">
+                <div class="container">                   
+                    <div class="row">
+                        <div class="col-lg-5" style="margin: 0px 343px;" id="signup-responsive">
+                            <div class="billing-details-area">
+							<center><img src="/images/logo-color.png"></center>
+                                <h2 class="cart-area-title" style="text-align: right;
+    margin-right: 22px;
+    color: #333;
+    font-size: 21px;
+    margin-bottom: 7px;
+    border-bottom: 1px dashed #696566;
+    padding-bottom: 6px;">LOG IN</h2>
+    <%if (messages.error) { %>
+        <%= messages.error %>
+    <% } %>
+                                <form class="reservation-form-select2" action="/login" method="post">
+                                    <div class="row">
+                                        <!-- First Name -->
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                                          
+                                            <div class="form-group">                                                
+                                                <input type="email" id="first-name" class="form-control" name="email" placeholder="Email">
+                                            </div>
+                                        </div>
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                                          
+                                            <div class="form-group">                                                
+                                                <input type="password" id="first-name" class="form-control" name="password" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <!-- last Name -->
+                                      
+                                    </div>
+                                   
+                                    <div class="row">                                    
+										
+										 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">    
+                                            <input type="submit" value="Log In" class="place-btn" />
+                                        </div>
+										
+										 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">                                          
+                                            <a href="#" class="forgot">Forgot Password?</a>
+                                        </div>
+										
+										 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                                          
+                                            <a href="/register" class="place-btn" style="width: 100%;
+    text-align: center;
+    margin-top: 18px;">CREATE A ACCOUNT NOW</a>
+                                        </div>										
+                                    </div>                                     
+                                </form>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>             
+    </div>
+<%- include('../includes/end.ejs') %>
+<%- include('../includes/foot.ejs') %>

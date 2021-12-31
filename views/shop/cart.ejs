@@ -1,0 +1,174 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/navigation.ejs') %>
+
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/slider/banner4.jpeg">
+    <div class="container"><!-- STRART CONTAINER -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title">
+            		<h1>Cart</h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Cart</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- END CONTAINER-->
+</div>
+
+<div class="section">
+	<div class="container">
+        <% if(session.cart) {%>
+            <div id="cart-summary">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive shop_cart_table">
+                            <% total = 0 %>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="product-name">Product</th>
+                                        <th></th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-subtotal">Total</th>
+                                        <th class="product-remove">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let pizza of Object.values(session.cart.items)) {%>
+                                    <% total = total + pizza.item.price*pizza.qty %>
+                                    <tr>
+                                        <td class="product-name" data-title="Product"><%= pizza.item.itemName %>
+                                        <br/><small id="pizza-<%= pizza.item.id %>"><%= pizza.note %></small>
+                                        </td>
+                                        <td>
+                                            <a id="yes-btn" class="add-to-cart-button theme-btn btn-style-three" data-id="<%= pizza.item.id %>" href="javascript:void(0)"><i class="fas fa-pencil-alt"></i>Note</a>
+                                        </td>
+                                        <td class="product-price" data-title="Price">$<%= pizza.item.price %>&nbsp;×&nbsp;<%= pizza.qty %></strong></td>
+                                        <td class="product-quantity" data-title="Quantity">
+                                            <div class="quantity aiz-plus-minus mr-2 ml-0">
+                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light minus" type="button" data-type="minus" data-field="quantity[<%= pizza.item.id %>]">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <input type="text" name="quantity[<%= pizza.item.id %>]" class="qty update-quantity" placeholder="1" value="<%= pizza.qty %>" min="1" max="10" readonly onchange="updateQuantity('<%= pizza.item.id %>','<%= pizza.item.price %>', this)">
+                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-light plus" type="button" data-type="plus" data-field="quantity[<%= pizza.item.id %>]">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="product-subtotal" data-title="Total">$<%= pizza.item.price * pizza.qty %></td>
+                                        <td class="product-remove" data-title="Remove">
+                                            <a href="javascript:void(0)" onclick="removeFromCartView(event, '<%= pizza.item.id %>')" class="btn btn-icon btn-sm btn-soft-primary btn-circle">
+                                                <i class="ti-close"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="medium_divider"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="cart_totals">
+                            <div class="heading_s1 mb-3">
+                                <h6>Cart Totals</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="cart_total_label">Total</td>
+                                            <td class="cart_total_amount"><strong>$<%= total.toFixed(2) %></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/checkout" class="btn btn-default">Proceed To CheckOut</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<div id="popup" style="display:none;">
+    <form action="/update-note" method="POST" novalidate>
+        <div class="form-group mb-0 mt-2 col-md-12">
+            <div class="heading_s1">
+                <h4>Additional information</h4>
+            </div>
+            <textarea rows="5" class="form-control ordernote" name="note" required placeholder="Order notes"></textarea>
+        </div>
+        <input type="hidden" name="id" class="hiddenValue" value="" />
+        <div class="form-group mb-0 mt-2 col-md-12">
+            <button class="btn btn-default">Save</button>
+        </div>
+    </form>
+</div>
+<script src="/js/vendor.min.js"></script>
+<script src="/js/plugins.min.js"></script>
+<script src="/js/main.js"></script>
+<script type="text/javascript">
+    var options = {
+        type: "html",
+        htmlSelector: "#popup"
+    };
+    
+    $('body').delegate('a.add-to-cart-button','click',function(e){  
+        e.preventDefault();
+        var title  = $(this).attr("data-id")
+        $('.hiddenValue').val(title);
+        $.get('/getnote/'+title, function (response) {
+            $('.ordernote').html(response)
+        });
+        $(this).simplePopup(options);
+    });
+    $('.checkout-toggle2').click(function() {
+        $('.checkout-toggle2').not(this).prop('checked', false);
+    });
+
+    function updateNavCart(){
+        $.post('nav_cart', function(data){
+            $('#cart_items').html(data);
+        });
+    }
+
+    function showAddToCartModal(id){
+        if(!$('#modal-size').hasClass('modal-lg')){
+            $('#modal-size').addClass('modal-lg');
+        }
+        $('#addToCart-modal-body').html(null);
+        $('#addToCart').modal();
+        $.post('showCartModal', {id:id}, function(data){
+            $('#addToCart-modal-body').html(data);
+        });
+    }
+
+    function removeFromCartView(e, key){
+        e.preventDefault();
+        $.post('cart-delete-item', {key:key}, function(data){
+            $('#cart-summary').html(data);
+        });
+    }
+    
+    function updateQuantity(key,price, element){
+        $.post('update-quantity', { id:key,price:price, quantity: element.value}, function(data){
+            $('#cart-summary').html(data);
+        });
+    }
+    
+</script>
+<%- include('../includes/foot.ejs') %>
+<%- include('../includes/end.ejs') %>
+
+</body>

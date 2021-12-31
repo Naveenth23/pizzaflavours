@@ -1,0 +1,50 @@
+<!-- START HEADER -->
+<header class="header_wrap fixed-top header_with_topbar dark_skin main_menu_uppercase">
+    <div class="top-header bg_dark light_skin d-md-block">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <ul class="contact_detail text-center text-lg-left">
+                        <li><i class="ti-time"></i>Timing: 4:30 PM - 9 PM</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center justify-content-center justify-content-lg-end">
+                        <ul class="contact_detail text-center text-lg-left">
+                            <li><i class="ti-time"></i>OPEN: TUESDAY - SUNDAY</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg"> 
+            <a class="navbar-brand" href="/">
+                <img class="logo_light" src="/images/logo_light.png" alt="logo">
+                <img class="logo_dark" src="/images/logo_dark.png" alt="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false"> 
+            	<span class="ion-android-menu"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="<%= path === '/' ? 'active' : '' %>" ><a class="nav-link" href="/">Home</a></li>
+                    <li class="<%= path === '/products' ? 'active' : '' %>">
+                        <a class="nav-link" href="/menu">ORDER NOW</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/contact">Contact</a>                      
+                    </li>
+                </ul>
+            </div>
+            <ul class="navbar-nav attr-nav align-items-center">
+                <li id="cart_items">
+                  <a class="nav-link cart_trigger" href="/cart">
+                    <i class="linearicons-cart"></i><span class="cart_count" id="cart-counter"><%= session.cart ? session.cart.totalQty : '0' %></span>
+                  </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

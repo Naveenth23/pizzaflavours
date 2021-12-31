@@ -1,0 +1,107 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/item.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('../includes/navigation.ejs') %>  
+        <div class="checkout-page-area" style="background-image: none; padding: 0px 0px">
+        <div class="container">
+          <div class="row">
+            <div
+              class="col-lg-5 col-md-12 col-sm-12 col-xs-12"
+              style="margin: 0px 343px"
+              id="signup-responsive"
+            >
+              <div class="billing-details-area">
+                <center><img src="/images/logo-color.png" /></center>
+                <h2
+                  class="cart-area-title"
+                  style="
+                    text-align: right;
+                    margin-right: 22px;
+                    color: #333;
+                    font-size: 21px;
+                    margin-bottom: 7px;
+                    border-bottom: 1px dashed #696566;
+                    padding-bottom: 6px;
+                  "
+                >
+                  CREATE A ACCOUNT
+                </h2>
+                <form class="reservation-form-select2" method="post" action="/register" name="password">
+                  <div class="row">
+                    <!-- First Name -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          id="first-name"
+                          class="form-control"
+                          name="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <input
+                          type="number"
+                          id="first-name"
+                          class="form-control"
+                          name="mobileNumber"
+                          placeholder="Phone"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <input
+                          type="email"
+                          id="first-name"
+                          class="form-control"
+                          name="email"
+                          placeholder="Email"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          id="first-name"
+                          class="form-control"
+                          placeholder="Address"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <input
+                          type="password"
+                          id="first-name"
+                          class="form-control"
+                          name="password"
+                          placeholder="Password"
+                        />
+                      </div>
+                    </div>
+                  <div class="row">
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                      <input type="submit" value="Submit Now"/>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+             
+    </div>
+<%- include('../includes/end.ejs') %>
+<%- include('../includes/foot.ejs') %>

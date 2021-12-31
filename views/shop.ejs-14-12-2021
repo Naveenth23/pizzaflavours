@@ -1,0 +1,53 @@
+<%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <div class="online-ordering">
+        <%- include('includes/navigation.ejs') %>
+
+        <main>
+            <div class="page menu-page">
+                <div class="body">
+                    <div class="menu" id="menu">
+                        <%- include('includes/category.ejs') %>
+                        <% if (items.length > 0) { %>
+                            <div class="item-list-widget">
+                                <div class="items-per-category">
+                                    <div class="category-summary"><div id="starters" class="link-anchor"></div><div class="name">Starters</div></div>
+                                    <div class="items-container">
+                                        <% for (let item of items) { %>
+                                            <div class="item-card-widget">
+                                                <div class="body">
+                                                    <div class="item-info">
+                                                        <div class="name"><%= item.itemName %></div>
+                                                        <div class="description ">
+                                                            <div class="content line-clamp-2">
+                                                                <%= item.description %>
+                                                            </div>
+                                                        </div>
+                                                        <div class="price-and-sold-out">
+                                                            <div class="price">$<%= item.price %></div>
+                                                        </div>
+                                                    </div>
+                                                    <%if(item.images) { %>
+                                                    <div class="image imgix">
+                                                        <img srcset="<%= item.images %>" alt="<%= item.itemName %>">
+                                                    </div>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <h1>No Items Found!</h1>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('includes/foot.ejs') %>
+    </div>
+<%- include('includes/end.ejs') %>
