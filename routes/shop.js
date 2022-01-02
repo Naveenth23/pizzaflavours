@@ -27,6 +27,8 @@ router.get("/signup", function (req, res) {
 
 router.get('/cart', cartController.index);
 router.post('/update-cart', cartController.update);
+router.post('/update-total', cartController.updateTotal);
+router.post('/remove-delivery', cartController.removeDelivery);
 router.post('/update-quantity', cartController.updateQuantity);
 router.post('/update-note', cartController.updateNote);
 router.post('/cart-delete-item', cartController.removeFromCart);

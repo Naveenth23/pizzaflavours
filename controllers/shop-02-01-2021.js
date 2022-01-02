@@ -1,6 +1,5 @@
 const fs = require('fs');
 const delivery = require("../data/delivery");
-const category = require("../data/category");
 
 // const admin = require("firebase-admin");
 // const bucket = admin.storage().bucket('fir-pos-8e4e4.appspot.com');
@@ -26,8 +25,34 @@ const getIndex = async (req, res, next) => {
 const getAllItems = async (req, res, next) => {
     try {
         const items = await firestore.collection('items');
-        const familyPack = await items.get();
+        const familyPack = await items.where('category', '==', 'FAMILY PACK').get();
+        const starterVeg = await items.where('category', '==', 'STARTERS VEGETARIAN').get();
+        const nonVeg = await items.where('category', '==', 'NON VEGETARIAN').get();
+        const platter = await items.where('category', '==', 'PLATTER').get();
+        const chiefs = await items.where('category', '==', "CHIEF’S SPECIAL").get();
+        const vegMainCourse = await items.where('category', '==', 'VEGETARIAN MAIN COURSE').get();
+        const chknMainCourse = await items.where('category', '==', 'CHICKEN MAIN COURSE').get();
+        const lambMainCourse = await items.where('category', '==', 'LAMB MAIN COURSE').get();
+        const beefMainCourse = await items.where('category', '==', 'BEEF MAIN COURSE').get();
+        const seaFood = await items.where('category', '==', 'SEAFOOD MAIN COURSE').get();
+        const vegan = await items.where('category', '==', 'VEGAN').get();
+        const biryani = await items.where('category', '==', 'BIRYANI').get();
+        const rice = await items.where('category', '==', 'RICE').get();
+        const breads = await items.where('category', '==', 'BREADS').get();
         const familyPackArray = [];
+        const starterVegArray = [];
+        const nonVegArray = [];
+        const platterArray = [];
+        const chiefsArray = [];
+        const vegMainCourseArray = [];
+        const chknMainCourseArray = [];
+        const lambMainCourseArray = [];
+        const beefMainCourseArray = [];
+        const seaFoodArray = [];
+        const veganArray = [];
+        const biryaniArray = [];
+        const riceArray = [];
+        const breadArray = [];
         familyPack.forEach(doc => {
             const family = new Item(
                 doc.id,
@@ -40,9 +65,177 @@ const getAllItems = async (req, res, next) => {
             );
             familyPackArray.push(family);
         });
+        starterVeg.forEach(doc => {
+            const starter = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            starterVegArray.push(starter);
+        });
+        nonVeg.forEach(doc => {
+            const nonveg = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            nonVegArray.push(nonveg);
+        });
+        platter.forEach(doc => {
+            const pltr = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            platterArray.push(pltr);
+        });
+        chiefs.forEach(doc => {
+            const chief = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            chiefsArray.push(chief);
+        });
+        vegMainCourse.forEach(doc => {
+            const vegmain = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            vegMainCourseArray.push(vegmain);
+        });
+        chknMainCourse.forEach(doc => {
+            const chknmain = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            chknMainCourseArray.push(chknmain);
+        });
+        beefMainCourse.forEach(doc => {
+            const beefmain = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            beefMainCourseArray.push(beefmain);
+        });
+        lambMainCourse.forEach(doc => {
+            const lambmain = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            lambMainCourseArray.push(lambmain);
+        });
+        seaFood.forEach(doc => {
+            const seafood = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            seaFoodArray.push(seafood);
+        });
+        vegan.forEach(doc => {
+            const vgn = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            veganArray.push(vgn);
+        });
+        biryani.forEach(doc => {
+            const bryn = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            biryaniArray.push(bryn);
+        });
+        rice.forEach(doc => {
+            const rc = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            riceArray.push(rc);
+        });
+        breads.forEach(doc => {
+            const brd = new Item(
+                doc.id,
+                doc.data().category,                    
+                doc.data().itemName,
+                doc.data().images,
+                doc.data().description,
+                doc.data().isAvailable,
+                doc.data().price
+            );
+            breadArray.push(brd);
+        });
         res.render('shop/product-list', {
             familyPack: familyPackArray,
-            category: category,
+            starterVeg: starterVegArray,
+            nonVeg: nonVegArray,
+            platters: platterArray,
+            chiefs: chiefsArray,
+            vegs: vegMainCourseArray,
+            chickens: chknMainCourseArray,
+            lambs: lambMainCourseArray,
+            beefs: beefMainCourseArray,
+            seafoods: seaFoodArray,
+            vegans: veganArray,
+            biryani: biryaniArray,
+            rice: riceArray,
+            naanbreads: breadArray,
             pageTitle: 'Shop',
             path: '/products',
             hasItems: familyPack.length > 0,

@@ -1,0 +1,717 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/navigation.ejs') %>
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/cart_bg.jpg">
+    <div class="container"><!-- STRART CONTAINER -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title">
+            		<h1>Menu</h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Menu</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- END CONTAINER-->
+</div>
+
+<div class="section pb_70">
+	<div class="container">
+        <% if (familyPack.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>FAMILY PACK</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="FamilyPack" role="tabpanel" aria-labelledby="FamilyPack-tab">
+                            <div class="row">
+                                <% for (let fmly of familyPack) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(fmly.images) { %>
+                                                    <img src="<%= fmly.images %>" alt="<%= fmly.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= fmly.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card"><%= fmly.itemName %></a></h5>
+                                                </div>
+                                                <a href ="javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card">
+                                                    <div class="product-description">
+                                                        <p><%= fmly.description %></p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= fmly.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (starterVeg.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>STARTER VEGETARIAN</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="StarterVegeterian" role="tabpanel" aria-labelledby="StarterVegeterian-tab">
+                            <div class="row">
+                                <% for (let stvg of starterVeg) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(stvg.images) { %>
+                                                    <img src="<%= stvg.images %>" alt="<%= stvg.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= stvg.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(stvg) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(stvg) %>" class="add-to-card"><%= stvg.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(stvg) %>" class="add-to-card"><p><%= stvg.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= stvg.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (nonVeg.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>STARTER NON-VEGETARIAN</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="StarterNonVegetarian" role="tabpanel" aria-labelledby="StarterNonVegetarian-tab">
+                            <div class="row">
+                                <% for (let nnvg of nonVeg) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(nnvg.images) { %>
+                                                    <img src="<%= nnvg.images %>" alt="<%= nnvg.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= nnvg.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(nnvg) %>" class="add-to-card btn btn-white " btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(nnvg) %>" class="add-to-card"><%= nnvg.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(nnvg) %>" class="add-to-card"><p><%= nnvg.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= nnvg.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (platters.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>PLATTERS</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let pltr of platters) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(pltr.images) { %>
+                                                    <img src="<%= pltr.images %>" alt="<%= pltr.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= pltr.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(pltr) %>" class="add-to-card btn btn-white" btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(pltr) %>" class="add-to-card"><%= pltr.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(pltr) %>" class="add-to-card"><p><%= pltr.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= pltr.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (chiefs.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>CHEF'S SPECIAL</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let chief of chiefs) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(chief.images) { %>
+                                                    <img src="<%= chief.images %>" alt="<%= chief.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= chief.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(chief) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(chief) %>" class="add-to-card"><%= chief.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(chief) %>" class="add-to-card"><p><%= chief.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= chief.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (vegs.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>CHEF'S SPECIAL</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let veg of vegs) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(veg.images) { %>
+                                                    <img src="<%= veg.images %>" alt="<%= veg.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= veg.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(veg) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(veg) %>" class="add-to-card"><%= veg.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(veg) %>" class="add-to-card"><p><%= veg.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= veg.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (chickens.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>CHICKEN MAIN COURSE</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let chkn of chickens) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(chkn.images) { %>
+                                                    <img src="<%= chkn.images %>" alt="<%= chkn.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= chkn.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(chkn) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(chkn) %>" class="add-to-card"><%= chkn.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(chkn) %>" class="add-to-card"><p><%= chkn.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= chkn.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (lambs.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>LAMB MAIN COURSE</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let lmb of lambs) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(lmb.images) { %>
+                                                    <img src="<%= lmb.images %>" alt="<%= lmb.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= lmb.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(lmb) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(lmb) %>" class="add-to-card"><%= lmb.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(lmb) %>" class="add-to-card"><p><%= lmb.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= lmb.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (beefs.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>BEEF MAIN COURSE</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let beef of beefs) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(beef.images) { %>
+                                                    <img src="<%= beef.images %>" alt="<%= beef.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= beef.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"> <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(beef) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(beef) %>" class="add-to-card"><%= beef.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(beef) %>" class="add-to-card"><p><%= beef.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= beef.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (seafoods.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>SEAFOOD MAIN COURSE</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let seafood of seafoods) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(seafood.images) { %>
+                                                    <img src="<%= seafood.images %>" alt="<%= seafood.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= seafood.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(seafood) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(seafood) %>" class="add-to-card"><%= seafood.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(seafood) %>" class="add-to-card"><p><%= seafood.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= seafood.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (vegans.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>VEGAN</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let vegan of vegans) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(vegan.images) { %>
+                                                    <img src="<%= vegan.images %>" alt="<%= vegan.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= vegan.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(vegan) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(vegan) %>" class="add-to-card"><%= vegan.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(vegan) %>" class="add-to-card"><p><%= vegan.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= vegan.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (biryani.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>BIRYANI</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let bryn of biryani) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(bryn.images) { %>
+                                                    <img src="<%= bryn.images %>" alt="<%= bryn.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= bryn.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(bryn) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(bryn) %>" class="add-to-card"><%= bryn.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(bryn) %>" class="add-to-card"><p><%= bryn.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= bryn.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (rice.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>RICE</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let rc of rice) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(rc.images) { %>
+                                                    <img src="<%= rc.images %>" alt="<%= rc.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= rc.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(rc) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(rc) %>" class="add-to-card"><%= rc.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(rc) %>" class="add-to-card"><p><%= rc.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= rc.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        <% if (naanbreads.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2>NAAN BREADS</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="Breakfast" role="tabpanel" aria-labelledby="Breakfast-tab">
+                            <div class="row">
+                                <% for (let bread of naanbreads) { %>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="menu_product_img">
+                                                <%if(bread.images) { %>
+                                                    <img src="<%= bread.images %>" alt="<%= bread.itemName %>">
+                                                <% }else{ %>
+                                                    <img src="/images/circle.png" alt="<%= bread.itemName %>">
+                                                <% } %>
+                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(bread) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                            </div>
+                                            <div class="menu_product_info">
+                                                <div class="title">
+                                                    <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(bread) %>" class="add-to-card"><%= bread.itemName %></a></h5>
+                                                </div>
+                                                <a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(bread) %>" class="add-to-card"><p><%= bread.description %></p></a>
+                                            </div>
+                                            <div class="menu_footer">
+                                                <div class="rate">
+                                                    <div class="product rate" style="width:68%"></div>
+                                                </div>
+                                                <div class="price">
+                                                    <span>$<%= bread.price %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+    
+
+<%- include('../includes/foot.ejs') %>
+<%- include('../includes/end.ejs') %>

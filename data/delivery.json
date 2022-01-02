@@ -1,0 +1,97 @@
+[
+    { 
+        "area": "MUNDIJONG", 
+        "price": 10,
+        "pincode": "6123"
+    },
+    {
+        "area":"DARLING DOWNS",
+        "price": 10,
+        "pincode":"6123"
+    },
+    {
+        "area":"HILBERT",
+        "price": 10,
+        "pincode":"6112"
+    },
+    {
+        "area":"ARMADALE",
+        "price": 10,
+        "pincode":"6112"
+    },
+    {
+        "area":"SEVILE GROVE",
+        "price": 10,
+        "pincode":"6112"
+    },
+    {
+        "area":"HAYNES",
+        "price": 10,
+        "pincode":"6112"
+    },
+    {
+        "area":"BROOKDALE",
+        "price": 10,
+        "pincode":"6123"
+    },
+    {
+        "area":"DARLING DOWNS",
+        "price": 10,
+        "pincode":"6112"
+    },
+    {
+        "name":"Minimum Order $ 45",
+            "areas":[
+                {
+                    "area":"SERPENTINE",
+                    "price": 15,
+                    "pincode":"6125"
+                },
+                {
+                    "area":"JARRAHDALE",
+                    "price": 15,
+                    "pincode":"6124"
+                }
+            ]
+    },
+    {
+        "name":"Minimum Order $30",
+            "areas":[
+                {
+                    "area":"BYFORD",
+                    "price": 5,
+                    "pincode":"6122"
+                }
+            ]
+    },
+    {
+        "name":"Minimum Order $35",
+            "areas":[
+                {
+                    "area":"OAKFORD",
+                    "price": 10,
+                    "pincode":"6121"
+                },
+                {
+                    "area":"CARDUP",
+                    "price": 10,
+                    "pincode":"6123"
+                },
+                {
+                    "area":"WHITBY",
+                    "price": 10,
+                    "pincode":"6123"
+                },
+                {
+                    "area":"MUNDIJONG",
+                    "price": 10,
+                    "pincode":"6123"
+                },
+                {
+                    "area":"DARLING DOWNS",
+                    "price": 10,
+                    "pincode":"6123"
+                }
+        ]
+    }
+]

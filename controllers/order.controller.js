@@ -36,6 +36,18 @@ function orderController(){
 			}
 			const session = await stripe.checkout.sessions.create({
 				payment_method_types: ['card'],
+				shipping_options: [
+					{
+					  shipping_rate_data: {
+						type: 'fixed_amount',
+						fixed_amount: {
+						  amount: req.session.cart.shippingCharge *100,
+						  currency: 'usd',
+						},
+						display_name: 'Delivery Charges',
+					  }
+					},
+				  ],
 				line_items: lineItems,
 				mode: 'payment',
 				success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
@@ -50,7 +62,7 @@ function orderController(){
 		async store(req, res) {
 			let userEntity = {};
 			// Validate request
-			const {name, mobileNumber, email, address,ordertype,pickupType } = req.body;
+			const {name, mobileNumber, email, address,city,postcode,ordertype,pickupType } = req.body;
 			let order_type = '';
 			if(ordertype === 'pickup'){
 				order_type = 'PICKUP';
@@ -82,6 +94,12 @@ function orderController(){
 			}
 			 
 			try {
+				if(ordertype ==='delivery'){
+					if(!city || !postcode) {
+						req.flash('error', 'All fields are required.');
+						return res.redirect('/checkout')
+					}		
+				}
 				let userDocRef = firestore.collection('users').doc();
 				req.session.user_id = userDocRef.id
 				req.session.user = userDocRef.id;
@@ -93,7 +111,7 @@ function orderController(){
 					creationByUid: userDocRef.id,
 					name: name,
 					mobileNumber: mobileNumber,
-					address: address,
+					address: address+','+city+','+postcode,
 					creationDate: firebase1.firestore.FieldValue.serverTimestamp(),
 					role: 'USER'
 				})
@@ -138,8 +156,7 @@ function orderController(){
 						tableNumber:''
 					})
 
-					
-					let orderItemEntity = {};
+				let orderItemEntity = {};
 					for(let productId of Object.values(req.session.cart.items)) {	
 						orderItemEntity['count'] = productId.qty;				
 						orderItemEntity['createdBy'] = name;

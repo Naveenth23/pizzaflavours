@@ -13,7 +13,8 @@ function cartController() {
 				req.session.cart = {
 					items: {},
 					totalQty: 0,
-					totalPrice: 0
+					totalPrice: 0,
+					shippingCharge: 0,
 				}
 			}
 			let { cart } = req.session;
@@ -25,11 +26,13 @@ function cartController() {
 				}
 				cart.totalQty += 1;
 				cart.totalPrice += parseFloat(price);
+				//cart.shippingCharge= 0;
 			}
 			else {
 				cart.items[id].qty += 1;
 				//cart.totalQty +=1;
 				cart.totalPrice += parseFloat(price);
+				//cart.shippingCharge = 0;
 			}
 			
 			return res.json({
@@ -51,7 +54,6 @@ function cartController() {
 				cart.items[id].totalQty +=parseInt(quantity);
 				cart.totalPrice += parseFloat(price);
 			}
-			
 			res.render('shop/cart-details', {
 				pageTitle: 'Shop',
 				path: '/',
@@ -82,6 +84,29 @@ function cartController() {
 			cart.items[id].note = req.body.note;
 			console.log(req.session.cart);
 			return res.redirect('/cart');
+		},		
+		updateTotal(req, res) {
+			const { price } = req.body;
+			let { cart } = req.session;	
+			let total = 0
+			for (let productId in req.session.cart.items) {
+				total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
+			}		
+			cart.shippingCharge = parseFloat(price);
+			return res.json({
+				total: (total+cart.shippingCharge).toFixed(2)
+			});
+		},
+		removeDelivery(req, res) {
+			let { cart } = req.session;	
+			let total = 0
+			for (let productId in req.session.cart.items) {
+				total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
+			}		
+			cart.shippingCharge = 0;
+			return res.json({
+				total: (total+cart.shippingCharge).toFixed(2)
+			});
 		},
 		getNote(req, res){
 			if(!req.session.cart) {

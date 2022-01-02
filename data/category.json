@@ -1,0 +1,56 @@
+[
+    { 
+        "category": "FAMILY PACK"
+    },
+    {
+        "category":"STARTER VEGETARIAN"
+    },
+    {
+        "category":"STARTER NON-VEGETARIAN"
+    },
+    {
+        "category":"PLATTERS"
+    },
+    {
+        "category":"CHEF'S SPECIAL"
+    },
+    {
+        "category":"VEGETABLES MAIN COURSE"
+    },
+    {
+        "category":"CHICKEN MAIN COURSE"
+    },
+    {
+        "category":"LAMB MAIN COURSE"
+    },
+    {
+        "category":"BEEF MAIN COURSE"
+    },
+    {
+        "category":"SEAFOOD MAIN COURSE"
+    },
+    {
+        "category":"VEGAN"
+    },
+    {
+        "category":"KIDS MENU"
+    },
+    {
+        "category":"BIRYANI"
+    },
+    {
+        "category":"RICE"
+    },
+    {
+        "category":"SALADS"
+    },
+    {
+        "category":"NAAN BREADS"
+    },
+    {
+        "category":"DESSERT"
+    },
+    {
+        "category":"DRINKS"
+    }
+]

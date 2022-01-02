@@ -2877,6 +2877,7 @@ a.order-btn {
 }
 .single_product .menu_product_img img {
 	width: 100%;
+	max-height:170px;
 }
 .single_product .menu_product_info p {
 	font-size: 14px;
@@ -6532,6 +6533,32 @@ footer .widget_recent_post .post_img img {
 }
 .tab-content.shop_info_tab {
 	margin-top: 30px;
+}
+.aiz-megabox {
+	position: relative;
+	cursor: pointer;
+}
+.aiz-megabox input {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+}
+.aiz-megabox .aiz-megabox-elem {
+	border: 1px solid #e2e5ec;
+	border-radius: 0.25rem;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	border-radius: 0.25rem;
+}
+.order-prise{
+	float:right;
+}
+td.product-remove {
+    color: #fd2321;
+}
+.area-city {
+	font-weight: normal;
+	font-size: 14px;
 }
 .custome-checkbox .form-check-label {
 	position: relative;

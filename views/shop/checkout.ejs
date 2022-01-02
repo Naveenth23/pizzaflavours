@@ -1,6 +1,6 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
-<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/checkout_bg.jpg">
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/slider/banner4.jpeg">
     <div class="container"><!-- STRART CONTAINER -->
         <div class="row">
             <div class="col-sm-12">
@@ -29,8 +29,11 @@
         	<div class="col-lg-6">
             	<div class="heading_s1">
             		<h4>Billing Details</h4>
+                    <div style="visibility:hidden; color:red; " id="chk_option_error">
+                        Please select at least one order type.
+                    </div>
                 </div>
-                <form class="billing-info-wrap row" action="/orders" method="post">	
+                <form class="billing-info-wrap row" onsubmit="return handleData()" action="/orders" method="post">	
                     <div class="form-group col-md-6">
                         <input type="text" required class="form-control" name="name" placeholder="Name *">
                     </div>
@@ -51,7 +54,7 @@
                     <div class="form-group create-account col-md-12" id="create_account">
                         <div class="chek-form">
                             <div class="custome-radio">
-                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_at_counter" id="pay_at_counter">
+                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_at_counter" id="pay_at_counter" checked>
                                 <label class="form-radio-label label_info" for="pickupType"><span>Pay at counter</span></label>
                             </div>
                         </div>
@@ -74,13 +77,13 @@
                     </div>
                    	<div class="different_address col-md-12" id="different_address">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="address" placeholder="Street name & Number *">
+                            <input type="text" class="form-control" name="address" id="address" placeholder="Street name & Number *">
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="city" placeholder="Town or City Area *">
+                            <input class="form-control" type="text" name="city" id="city" placeholder="Town or City Area *" readonly="readonly">
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="postcode" placeholder="Postcode, Block, Intercom, Where to Park *">
+                            <input class="form-control" type="text" name="postcode" id="pincode" placeholder="Postcode, Block, Intercom, Where to Park *" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -115,8 +118,12 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th>Delivery</th>
+                                    <td id="delivery_charges">$0</td>
+                                </tr>
+                                <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal">$<%= total.toFixed(2) %></td>
+                                    <td class="product-subtotal" id="product-subtotal">$<%= (total+session.cart.shippingCharge).toFixed(2) %></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -132,26 +139,97 @@
         <h4>DELIVERY AVAILABLE</h4>
     </div>
     <div class="payment_option">
-        <div class="custome-radio">
-            <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" value="option3" checked="">
-            <label class="form-check-label" for="exampleRadios3">Direct Bank Transfer</label>
-            <p data-method="option3" class="payment-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration. </p>
-        </div>
-        <div class="custome-radio">
-            <input class="form-check-input" type="radio" name="payment_option" id="exampleRadios4" value="option4">
-            <label class="form-check-label" for="exampleRadios4">Check Payment</label>
-        </div>
-        <div class="custome-radio">
-            <input class="form-check-input" type="radio" name="payment_option" id="exampleRadios5" value="option5">
-            <label class="form-check-label" for="exampleRadios5">Paypal</label>
-        </div>
+        <% for(let dlvry of Object.values(delivery)) {%>
+            <%if(dlvry.area){ %>
+                <label class="aiz-megabox d-block mb-3">
+                    <input value="<%=dlvry.area%>_<%=dlvry.price%>_<%=dlvry.pincode%>" class="online_payment" type="radio" name="delivery_option" onclick="javascript: getdelivery(this, value);"  checked="">
+                    <span class="d-block p-3 aiz-megabox-elem">
+                        <span class="city-prise">
+                            <span class="area-city">
+                                <%= dlvry.area %>
+                            </span>
+                            <span class="order-prise">$ <%= dlvry.price %></span>
+                        </span>
+                        <span class="d-block area-pin">
+                            <span class="d-block fw-600 fs-15"> <%= dlvry.pincode %></span>
+                        </span>
+                    </span>
+                </label>
+            <% } %>
+
+            <%if(dlvry.name){ %>
+            <div class="heading_s1">
+                <h5><%=dlvry.name%></h5>
+            </div>
+            <% for(let items of Object.values(dlvry.areas)) {%>
+                <label class="aiz-megabox d-block mb-3">
+                    <input value="<%=items.area%>_<%=items.price%>_<%=items.pincode%>" class="online_payment" type="radio" name="delivery_option" onclick="javascript: getdelivery(this, value);"  checked="">
+                    <span class="d-block p-3 aiz-megabox-elem">
+                        <span class="city-prise">
+                            <span class="area-city">
+                                <%=items.area%>
+                            </span>
+                            <span class="order-prise">$<%=items.price%></span>
+                        </span>
+                        <span class="d-block area-pin">
+                            <span class="d-block fw-600 fs-15"><%=items.pincode%></span>
+                        </span>
+                    </span>
+                </label>
+            <% } %>
+            <% } %>
+        <% } %>
     </div>
 </div>
 <%- include('../includes/foot.ejs') %>
 <%- include('../includes/end.ejs') %>
 
-
+<script src="/js/scripts.js"></script>
+<script src="/js/jquery.simple-popup.min.js"></script>
 <script type="text/javascript">
+    function handleData()
+    {
+        var form_data = new FormData(document.querySelector("form"));        
+        if(!form_data.has("ordertype"))
+        {
+            document.getElementById("chk_option_error").style.visibility = "visible";
+        return false;
+        }
+        else
+        {
+            document.getElementById("chk_option_error").style.visibility = "hidden";
+        return true;
+        }        
+    }
+
+    function getdelivery(e, val) {
+        if (!$(this).is(':checked')) {
+            var matches = val.split('_');        
+            var area = matches[0];
+            var price = matches[1];
+            var pincode = matches[2];
+            
+            $('#city').val(toTitleCase(area));
+            $('#pincode').val(pincode);
+            $.post('update-total', { price:price}, function(data){
+                $('#delivery_charges').html('$'+price);
+                $('#product-subtotal').html('$'+data.total);
+            });
+            $('.close').trigger('click');
+        } else {
+            $("#chkroot").removeAttr('checked');
+        }
+    }
+
+    function toTitleCase(str) {
+        return str.replace(
+            /\w\S*/g,
+            function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }
+        );
+    }
+
     var options = {
         type: "html",
         htmlSelector: "#popup"
@@ -159,21 +237,31 @@
     $('input[type="checkbox"]').on('change', function() {
     $('input[type="checkbox"]').not(this).prop('checked', false);
 
+    
     var createaccount = document.getElementById("createaccount");
     var create_account = document.getElementById("create_account");
     if (createaccount.checked == true){        
-        create_account.style.display = "block";
+        $('.create-account').css("display","block");
     } else {
-        create_account.style.display = "none";
+        $('.create-account').css("display","none");
     }
     var differentaddress = document.getElementById("differentaddress");
     var different_address = document.getElementById("different_address");
-
-   
+    
     if (differentaddress.checked == true){
         $(this).simplePopup(options);
+        $("input:radio").removeAttr("checked");
+        $("input:radio").attr("checked", false);
+        $('#address').prop('required', true);
         different_address.style.display = "block";
     } else {
+        $('#city').val('');
+        $('#pincode').val('');
+        $.post('remove-delivery', function(data){
+            $('#delivery_charges').html('$0');
+            $('#product-subtotal').html('$'+data.total);
+        });
+        $('#address').prop('required', false);
         different_address.style.display = "none";
     }
 });

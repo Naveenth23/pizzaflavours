@@ -67,32 +67,23 @@
                                     </tr>
                                     <% } %>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="px-0">
+                                            <div class="row no-gutters align-items-center">        
+                                                <div class="col-lg-4 col-md-6 mb-3 mb-md-0">
+                                                    <div class="coupon field_form input-group">
+                                                        <input type="text" value="$<%= total.toFixed(2) %>" class="form-control form-control-sm cart_total_amount" disabled="disabled" readonly="readonly">
+                                                        <div class="input-group-append">
+                                                            <a href="/checkout" class="btn btn-default btn-sm">CheckOut</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="medium_divider"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="cart_totals">
-                            <div class="heading_s1 mb-3">
-                                <h6>Cart Totals</h6>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td class="cart_total_label">Total</td>
-                                            <td class="cart_total_amount"><strong>$<%= total.toFixed(2) %></strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <a href="/checkout" class="btn btn-default">Proceed To CheckOut</a>
                         </div>
                     </div>
                 </div>
