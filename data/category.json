@@ -1,56 +1,74 @@
 [
     { 
-        "category": "FAMILY PACK"
+        "category": "FAMILY PACK",
+        "slug":"FAMILY PACK"
     },
     {
-        "category":"STARTER VEGETARIAN"
+        "category":"STARTERS VEGETARIAN",
+        "slug":"STARTERS VEGETARIAN"
     },
     {
-        "category":"STARTER NON-VEGETARIAN"
+        "category":"STARTER NON-VEGETARIAN",
+        "slug":"NON VEGETARIAN"
     },
     {
-        "category":"PLATTERS"
+        "category":"PLATTERS",
+        "slug":"PLATTER"
     },
     {
-        "category":"CHEF'S SPECIAL"
+        "category":"CHEF'S SPECIAL",
+        "slug":"CHIEF’S SPECIAL"
     },
     {
-        "category":"VEGETABLES MAIN COURSE"
+        "category":"VEGETABLES MAIN COURSE",
+        "slug":"VEGETARIAN MAIN COURSE"
     },
     {
-        "category":"CHICKEN MAIN COURSE"
+        "category":"CHICKEN MAIN COURSE",
+        "slug":"CHICKEN MAIN COURSE"
     },
     {
-        "category":"LAMB MAIN COURSE"
+        "category":"LAMB MAIN COURSE",
+        "slug":"LAMB MAIN COURSE"
     },
     {
-        "category":"BEEF MAIN COURSE"
+        "category":"BEEF MAIN COURSE",
+        "slug":"BEEF MAIN COURSE"
     },
     {
-        "category":"SEAFOOD MAIN COURSE"
+        "category":"SEAFOOD MAIN COURSE",
+        "slug":"SEAFOOD MAIN COURSE"
     },
     {
-        "category":"VEGAN"
+        "category":"VEGAN",
+        "slug":"VEGAN"
     },
     {
-        "category":"KIDS MENU"
+        "category":"KIDS MENU",
+        "slug":"KIDS MENU"
     },
     {
-        "category":"BIRYANI"
+        "category":"BIRYANI",
+        "slug":"BIRYANI"
     },
     {
-        "category":"RICE"
+        "category":"RICE",
+        "slug":"RICE"
     },
     {
-        "category":"SALADS"
+        "category":"SALADS",
+        "slug":"SALADS"
     },
     {
-        "category":"NAAN BREADS"
+        "category":"NAAN BREADS",
+        "slug":"BREADS"
     },
     {
-        "category":"DESSERT"
+        "category":"DESSERT",
+        "slug":"DESSERT"
     },
     {
-        "category":"DRINKS"
+        "category":"DRINKS",
+        "slug":"DRINKS"
     }
 ]
