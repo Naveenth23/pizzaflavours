@@ -1,71 +1,23 @@
 [
     { 
-        "category": "FAMILY PACK",
-        "slug":"FAMILY PACK"
+        "category": "SPECIAL DEALS",
+        "slug":"SPECIAL DEALS"
     },
     {
-        "category":"STARTERS VEGETARIAN",
-        "slug":"STARTERS VEGETARIAN"
+        "category":"STONE BAKED PIZZAS",
+        "slug":"STONE BAKED PIZZAS"
     },
     {
-        "category":"STARTER NON-VEGETARIAN",
-        "slug":"NON VEGETARIAN"
+        "category":"PASTA",
+        "slug":"PASTA"
     },
     {
-        "category":"PLATTERS",
-        "slug":"PLATTER"
-    },
-    {
-        "category":"CHEF'S SPECIAL",
-        "slug":"CHIEF’S SPECIAL"
-    },
-    {
-        "category":"VEGETABLES MAIN COURSE",
-        "slug":"VEGETARIAN MAIN COURSE"
-    },
-    {
-        "category":"CHICKEN MAIN COURSE",
-        "slug":"CHICKEN MAIN COURSE"
-    },
-    {
-        "category":"LAMB MAIN COURSE",
-        "slug":"LAMB MAIN COURSE"
-    },
-    {
-        "category":"BEEF MAIN COURSE",
-        "slug":"BEEF MAIN COURSE"
-    },
-    {
-        "category":"SEAFOOD MAIN COURSE",
-        "slug":"SEAFOOD MAIN COURSE"
-    },
-    {
-        "category":"VEGAN",
-        "slug":"VEGAN"
+        "category":"SIDES",
+        "slug":"SIDES"
     },
     {
         "category":"KIDS MENU",
         "slug":"KIDS MENU"
-    },
-    {
-        "category":"BIRYANI",
-        "slug":"BIRYANI"
-    },
-    {
-        "category":"RICE",
-        "slug":"RICE"
-    },
-    {
-        "category":"SALADS",
-        "slug":"SALADS"
-    },
-    {
-        "category":"NAAN BREADS",
-        "slug":"BREADS"
-    },
-    {
-        "category":"DESSERT",
-        "slug":"DESSERT"
     },
     {
         "category":"DRINKS",

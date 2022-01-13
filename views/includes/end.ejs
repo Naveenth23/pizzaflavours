@@ -44,14 +44,14 @@
        jQuery('#order-btn').click();
     });
 
-    function showAddToCartModal(id){
-        if(!$('#modal-size').hasClass('modal-lg')){
-            $('#modal-size').addClass('modal-lg');
-        }
-        $('#addToCart-modal-body').html(null);
-        $('#addToCart').modal();
-        $.post('showCartModal', {id:id}, function(data){
-            $('#addToCart-modal-body').html(data);
-        });
-    }
+    // function showAddToCartModal(id){
+    //     if(!$('#modal-size').hasClass('modal-lg')){
+    //         $('#modal-size').addClass('modal-lg');
+    //     }
+    //     $('#addToCart-modal-body').html(null);
+    //     $('#addToCart').modal();
+    //     $.post('showCartModal', {id:id}, function(data){
+    //         $('#addToCart-modal-body').html(data);
+    //     });
+    // }
 </script>

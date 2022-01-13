@@ -1,0 +1,278 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/navigation.ejs') %>
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/slider/banner4.jpeg">
+    <div class="container"><!-- STRART CONTAINER -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title">
+            		<h1>Checkout</h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Checkout</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- END CONTAINER-->
+</div>
+<div class="section">
+	<div class="container">
+        <div class="row">
+        	<div class="col-12">
+            	<div class="medium_divider clearfix"></div>
+            </div>
+        </div>
+        <div class="row">
+            <% if(messages.error) { %>
+                <span class="text-red-500 text-sm"><%= messages.error %></span>
+            <% } %>
+        	<div class="col-lg-6">
+            	<div class="heading_s1">
+            		<h4>Billing Details</h4>
+                    <div style="visibility:hidden; color:red; " id="chk_option_error">
+                        Please select at least one order type.
+                    </div>
+                </div>
+                <form class="billing-info-wrap row" onsubmit="return handleData()" action="/orders" method="post">	
+                    <div class="form-group col-md-6">
+                        <input type="text" required class="form-control" name="name" placeholder="Name *">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input class="form-control" required type="text" name="mobileNumber" placeholder="Phone *">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input class="form-control" required type="text" name="email" placeholder="Email address *">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="chek-form">
+                            <div class="custome-checkbox">
+                                <input class="form-check-input" type="checkbox" value="pickup" name="ordertype" id="createaccount">
+                                <label class="form-check-label label_info" for="createaccount"><span>Pickup?</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group create-account col-md-12" id="create_account">
+                        <div class="chek-form">
+                            <div class="custome-radio">
+                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_at_counter" id="pay_at_counter" checked>
+                                <label class="form-radio-label label_info" for="pickupType"><span>Pay at counter</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group create-account col-md-12" id="create_account">
+                        <div class="chek-form">
+                            <div class="custome-radio">
+                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_now" id="pay_now">
+                                <label class="form-radio-label label_info" for="pickupType"><span>Pay Now</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ship_detail col-md-12 form-group">
+                    	<div class="chek-form">
+                            <div class="custome-checkbox">
+                                <input class="form-check-input" type="checkbox" value="delivery" name="ordertype" id="differentaddress">
+                                <label class="form-check-label label_info" for="differentaddress"><span>Delivery</span></label>
+                            </div>
+                        </div>
+                    </div>
+                   	<div class="different_address col-md-12" id="different_address">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="address" id="address" placeholder="Street name & Number *">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="city" id="city" placeholder="Town or City Area *" readonly="readonly">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="postcode" id="pincode" placeholder="Postcode, Block, Intercom, Where to Park *" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-default">
+                            Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <div class="order_review">
+                    <div class="heading_s1">
+                        <h4>Your Orders</h4>
+                    </div>
+                    <div class="table-responsive order_table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% total = 0 %>
+                                <% test = 0 %>
+                                <% for(let pizza of Object.values(session.cart.items)) {%>
+                                    <% total = total + pizza.item.price*pizza.qty %>
+                                    <% if (pizza.item.toppings.length > 0) { %>
+                                        <%  for(let t of JSON.parse(pizza.item.toppings)) {
+                                        test1 = t.split(',');
+                                        test +=parseFloat(test1[2]);
+                                        }
+                                    } 
+                                    
+                                    total = total + test;
+                                    %>
+                                <tr>
+                                    <td><%= pizza.item.itemName %> <span class="product-qty">x <%= pizza.qty %></span></td>
+                                    <td>$<%= pizza.item.price * pizza.qty %></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Delivery</th>
+                                    <td id="delivery_charges">$0</td>
+                                </tr>
+                                <tr>
+                                    <th>Total</th>
+                                    <td class="product-subtotal" id="product-subtotal">$<%= (total+session.cart.shippingCharge).toFixed(2) %></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popup" style="display:none;">
+    <div class="heading_s1">
+        <h4>DELIVERY AVAILABLE</h4>
+    </div>
+    <div class="payment_option">
+        <% for(let dlvry of Object.values(delivery)) {%>
+            <%if(dlvry.area){ %>
+                <label class="aiz-megabox d-block mb-3">
+                    <input value="<%=dlvry.area%>_<%=dlvry.price%>_<%=dlvry.pincode%>" class="online_payment" type="radio" name="delivery_option" onclick="javascript: getdelivery(this, value);"  checked="">
+                    <span class="d-block p-3 aiz-megabox-elem">
+                        <span class="city-prise">
+                            <span class="area-city">
+                                <%= dlvry.area %>
+                            </span>
+                            <span class="order-prise">$ <%= dlvry.price %></span>
+                        </span>
+                        <span class="d-block area-pin">
+                            <span class="d-block fw-600 fs-15"> <%= dlvry.pincode %></span>
+                        </span>
+                    </span>
+                </label>
+            <% } %>
+
+            <%if(dlvry.name){ %>
+            <div class="heading_s1">
+                <h5><%=dlvry.name%></h5>
+            </div>
+            <% for(let items of Object.values(dlvry.areas)) {%>
+                <label class="aiz-megabox d-block mb-3">
+                    <input value="<%=items.area%>_<%=items.price%>_<%=items.pincode%>" class="online_payment" type="radio" name="delivery_option" onclick="javascript: getdelivery(this, value);"  checked="">
+                    <span class="d-block p-3 aiz-megabox-elem">
+                        <span class="city-prise">
+                            <span class="area-city">
+                                <%=items.area%>
+                            </span>
+                            <span class="order-prise">$<%=items.price%></span>
+                        </span>
+                        <span class="d-block area-pin">
+                            <span class="d-block fw-600 fs-15"><%=items.pincode%></span>
+                        </span>
+                    </span>
+                </label>
+            <% } %>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+<%- include('../includes/foot.ejs') %>
+<%- include('../includes/end.ejs') %>
+
+<script src="/js/scripts.js"></script>
+<script src="/js/jquery.simple-popup.min.js"></script>
+<script type="text/javascript">
+    function handleData()
+    {
+        var form_data = new FormData(document.querySelector("form"));        
+        if(!form_data.has("ordertype"))
+        {
+            document.getElementById("chk_option_error").style.visibility = "visible";
+        return false;
+        }
+        else
+        {
+            document.getElementById("chk_option_error").style.visibility = "hidden";
+        return true;
+        }        
+    }
+
+    function getdelivery(e, val) {
+        if (!$(this).is(':checked')) {
+            var matches = val.split('_');        
+            var area = matches[0];
+            var price = matches[1];
+            var pincode = matches[2];
+            
+            $('#city').val(toTitleCase(area));
+            $('#pincode').val(pincode);
+            $.post('update-total', { price:price}, function(data){
+                $('#delivery_charges').html('$'+price);
+                $('#product-subtotal').html('$'+data.total);
+            });
+            $('.close').trigger('click');
+        } else {
+            $("#chkroot").removeAttr('checked');
+        }
+    }
+
+    function toTitleCase(str) {
+        return str.replace(
+            /\w\S*/g,
+            function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }
+        );
+    }
+
+    var options = {
+        type: "html",
+        htmlSelector: "#popup"
+    };
+    $('input[type="checkbox"]').on('change', function() {
+    $('input[type="checkbox"]').not(this).prop('checked', false);
+
+    
+    var createaccount = document.getElementById("createaccount");
+    var create_account = document.getElementById("create_account");
+    if (createaccount.checked == true){        
+        $('.create-account').css("display","block");
+    } else {
+        $('.create-account').css("display","none");
+    }
+    var differentaddress = document.getElementById("differentaddress");
+    var different_address = document.getElementById("different_address");
+    
+    if (differentaddress.checked == true){
+        $(this).simplePopup(options);
+        $("input:radio").removeAttr("checked");
+        $("input:radio").attr("checked", false);
+        $('#address').prop('required', true);
+        different_address.style.display = "block";
+    } else {
+        $('#city').val('');
+        $('#pincode').val('');
+        $.post('remove-delivery', function(data){
+            $('#delivery_charges').html('$0');
+            $('#product-subtotal').html('$'+data.total);
+        });
+        $('#address').prop('required', false);
+        different_address.style.display = "none";
+    }
+});
+</script>

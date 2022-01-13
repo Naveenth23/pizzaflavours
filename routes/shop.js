@@ -17,6 +17,9 @@ router.get('/item/:id', shopController.getItem);
 //router.post('/update-cart', shopController.update);
 //router.get('/cart', shopController.getCart);
 router.post('/add-to-cart', shopController.addToCart);
+router.post('/getItems', shopController.getItems);
+router.post('/special-deals', shopController.specialDeals);
+
 router.get('/add-note', shopController.addNote);
 
 

@@ -59,15 +59,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group create-account col-md-12" id="create_account">
+                    <!-- <div class="form-group create-account col-md-12" id="create_account">
                         <div class="chek-form">
                             <div class="custome-radio">
                                 <input class="form-radio-input" type="radio" name="pickupType" value="pay_now" id="pay_now">
                                 <label class="form-radio-label label_info" for="pickupType"><span>Pay Now</span></label>
                             </div>
                         </div>
-                    </div>
-                    <div class="ship_detail col-md-12 form-group">
+                    </div> -->
+                    <div class="ship_detail col-md-12 form-group" style="display:none;">
                     	<div class="chek-form">
                             <div class="custome-checkbox">
                                 <input class="form-check-input" type="checkbox" value="delivery" name="ordertype" id="differentaddress">
@@ -108,6 +108,7 @@
                             </thead>
                             <tbody>
                                 <% total = 0 %>
+                                <% test = 0 %>
                                 <% for(let pizza of Object.values(session.cart.items)) {%>
                                     <% total = total + pizza.item.price*pizza.qty %>
                                 <tr>
@@ -134,7 +135,7 @@
     </div>
 </div>
 
-<div id="popup" style="display:none;">
+<!-- <div id="popup" style="display:none;">
     <div class="heading_s1">
         <h4>DELIVERY AVAILABLE</h4>
     </div>
@@ -180,7 +181,7 @@
             <% } %>
         <% } %>
     </div>
-</div>
+</div> -->
 <%- include('../includes/foot.ejs') %>
 <%- include('../includes/end.ejs') %>
 

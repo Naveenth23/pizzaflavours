@@ -1,0 +1,275 @@
+<% if (pizzaItems.length > 0) { %>    
+    <% for(var i=1; i<=pizzacount; i++) {%>  
+    <div class="heading_s1">
+        <h4>Select <%= i %> Pizza</h4>
+    </div>
+    <div class="topping-items">
+        <div class="table-responsive order_table">
+            <table class="topping-table" class="pizza-special-deals">
+                <thead>
+                    <% for (let pizza of pizzaItems) { 
+                    pizza.pizzacount = pizzacount   
+                    pizza.pid = i+'_'+pizza.id
+                    pizza.newingredients = []
+                    %>    
+                    <tr>
+                        <th width="80%">
+                            <div class="checkPizza" id="checkPizza_<%= i %>">
+                                <input type="checkbox" class="pizzas" value="<%= JSON.stringify(pizza) %>" name="pizza" id="pizzas">
+                                <label for="pizzas"><span><%= pizza.itemName %></span></label>
+                            </div>
+                            <div class="pizza-toppings hidden-list">
+                                
+                                <div class="heading_s1">
+                                    <h4>Ingredients</h4>
+                                </div>
+                                <div id="ingredients">
+                                    <div class="table-responsive order_table">
+                                        <table class="ingredient-table">
+                                            <thead>
+                                                <%  for(let t of pizza.ingredients) {
+                                                    t.id = i+'_'+pizza.id
+                                                    data1 = {
+                                                        id: i+'_'+pizza.id,
+                                                        ingredient: t+',NO'
+                                                    };
+                                                %>
+                                                <th><input type="checkbox" id="ingredient" class="ingredients" name="ingredient1" value="<%= JSON.stringify(data1) %>" checked><label><span><%= t %></span></label></th>
+                                                <% } %>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <% for (let topping of toppings) { %>   
+                                    <div class="title-wrap">
+                                        <h5 class="cart-bottom-title section-bg-gray"><%= topping.toppingCategoryName %></h5>
+                                    </div>
+                                    <ul>
+                                        <% for(let items of Object.values(topping.topping)) {
+                                            items.id = i+'_'+pizza.id
+                                        %>
+                                        <li><input type="checkbox" class="toppings" name="topping" id="topping" value="<%= JSON.stringify(items) %>"> <%= items.toppingName %> <span>$<%= items.price %></span></li>
+                                        <% } %>
+                                    </ul>
+                                <% } %>
+                            </div>
+                        </th>
+                    </tr>
+                    <% } %>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <% } %>
+<% } %>
+
+<% if (pastaItems.length > 0) { %>
+    <% for(var i=1; i<=pastacount; i++) {%>   
+        <div class="heading_s1">
+            <h4>Select <%= i %> Pasta</h4>
+        </div>
+        <div class="topping-items">
+            <div class="table-responsive order_table">
+                <table class="topping-table">
+                    <thead>
+                        <% for (let pasta of pastaItems) { 
+                            pasta.pastacount = pastacount  
+                            pasta.pid = i+'_'+pasta.id 
+                        %>    
+                        <tr>
+                            <th width="80%">
+                                <div class="checkPasta">
+                                    <input type="checkbox" class="pastas" value="<%= JSON.stringify(pasta) %>" name="pasta" id="pastas">
+                                    <label for="pastas"><span><%= pasta.itemName %></span></label>
+                                </div>
+                            </th>
+                        </tr>
+                        <% } %>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    <% } %>
+<% } %>
+
+<% if (garlicItems.length > 0) { %>
+    <div class="heading_s1">
+        <h4>Garlics</h4>
+    </div>
+    <div class="topping-items">
+        <div class="table-responsive order_table">
+            <table class="topping-table">
+                <thead>
+                    <tr>
+                        <th width="80%">
+                            <input type="checkbox" class="garlics" id="garlic_bread" value='{"id":"THtO4898SiTcJBNlDV2J","gid":"RRrEJWaj8hcguhqCPF1V","category":"SIDES","itemName":"GARLIC BREAD","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"7","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="drink" id="drinks" checked="checked" disabled>
+                            <label for="drinks"><span>GARLIC BREAD</span></label>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+<% } %>
+
+<% if (drinkItems.length > 0) { %>
+    <div class="heading_s1">
+        <h4>Drinks</h4>
+    </div>
+    <div class="topping-items">
+        <div class="table-responsive order_table">
+            <table class="topping-table">
+                <thead>
+                    <tr>
+                        <th width="80%">
+                            <input type="checkbox" id="coke_drink" class="drinks" value='{"id":"RRrEJWaj8hcguhqCPF1V","did":"RRrEJWaj8hcguhqCPF1V","category":"DRINKS","itemName":"COKE (1.25L)","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"5","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="drink" id="drinks" checked="checked" disabled>
+                            <label for="drinks"><span>COKE (1.25L)</span></label>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+<% } %>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    let pizzaList = [];
+
+    $('body').delegate('.ingredients','change',function(e){ 
+        ingrdnt = JSON.parse($(this).val()); 
+        if (!$(this).is(":checked")){        
+            for (var i = 0; i < pizzaList.length; i++){
+                var obj = pizzaList[i]
+                if(obj.pid === ingrdnt.id){                     
+                    obj.newingredients.push(ingrdnt.ingredient);
+                }                
+            }
+        }else{
+            for (var i = 0; i < pizzaList.length; i++){
+                var obj = pizzaList[i]
+                for (index = 0; index < pizzaList.length; index++) {
+                    let rmvTopping = ingrdnt.ingredient;
+                    obj.newingredients = obj.newingredients.filter(e => e !== rmvTopping);
+                }        
+            }
+        }
+
+        // console.log(pizzaList);
+    });
+
+    $('body').delegate('.toppings','change',function(e){         
+        topping = JSON.parse($(this).val());    
+        if ($(this).is(":checked")){        
+            for (var i = 0; i < pizzaList.length; i++){
+                var obj = pizzaList[i]
+                if(obj.pid === topping.id){
+                    obj.toppings.push(topping.toppingName+","+topping.category+","+topping.price+",1,1,"+topping.documentId);
+                }                
+            }
+            $('.specialList').val(JSON.stringify(pizzaList));
+        }else{
+            for (var i = 0; i < pizzaList.length; i++){
+                var obj = pizzaList[i]
+                for (index = 0; index < obj.toppings.length; index++) {
+                    if (obj.toppings[index].indexOf(topping.documentId) > -1)
+                    {                        
+                        let rmvTopping = topping.toppingName+","+topping.category+","+topping.price+",1,1,"+topping.documentId;
+                        obj.toppings = obj.toppings.filter(e => e !== rmvTopping);
+                    }
+                }        
+            }
+        }
+
+        // console.log(pizzaList);
+    });
+
+    limit = 0; //set limit
+    limit1 =0;
+  pizzaChecks = document.querySelectorAll('.checkPizza input[type="checkbox"]'); //select all checkboxes
+  pastaChecks = document.querySelectorAll('.checkPasta input[type="checkbox"]'); //select all checkboxes
+  garlicBreads = document.querySelector('#garlic_bread'); //select all checkboxes
+  cokeDrink = document.querySelector('#coke_drink'); //select all checkboxes
+  
+  function pizzaChecker(elem) {
+    //   console.log(elem.parentNode)
+    pizza = JSON.parse(elem.value);
+    pizza.pizzacount;
+    if (elem.checked) { //if checked, increment counter
+        pizzaList.push(pizza);
+        $('.specialList').val(JSON.stringify(pizzaList));
+        console.log(pizzaList);
+      limit++;
+    } else {
+        pizzaList.splice(pizzaList.findIndex(e => e.pid === pizza.id),1);
+        $('.specialList').val(pizzaList);
+      limit--; //else, decrement counter
+    }
+    
+    let count = 0;
+    for (i = 0; i < pizzaChecks.length; i++) { // loop through all 
+        // console.log(pizzaChecks[i].closest(".topping-table").querySelectorAll("input"))
+        let checks = pizzaChecks[i].closest(".topping-table").querySelectorAll("input.pizzas");
+        // console.log(checks.length);
+        let count = pizzaChecks[i].closest(".topping-table").querySelectorAll("input.pizzas:checked").length;
+        //console.log(count)
+        for (j = 0; j < checks.length; j++) {    
+            if(!checks[j].checked){
+                checks[j].disabled = true;
+            }
+            if(count==0){
+                checks[j].disabled = false;
+            }            
+        }
+        
+    //   if (limit == parseInt(pizza.pizzacount)) {
+    //     if (!pizzaChecks[i].checked) {
+    //       pizzaChecks[i].disabled = true; // and disable unchecked pizzaChecks
+    //     }  
+    //   } else { //if limit is less than two  
+    //     if (!pizzaChecks[i].checked) {
+    //       pizzaChecks[i].disabled = false; // enable unchecked pizzaChecks
+    //     }  
+    //   }
+    }
+  }
+  
+  function pastaChecker(elem) {
+    pasta = JSON.parse(elem.value);
+    pasta.pastacount;
+    if (elem.checked) { //if checked, increment counter
+        pizzaList.push(pasta);
+        $('.specialList').val(JSON.stringify(pizzaList));
+      limit1++;
+    } else {
+        pizzaList.splice(pizzaList.findIndex(e => e.pid === pasta.id),1);
+      limit1--; //else, decrement counter
+    }
+
+    console.log(pizzaList);
+  
+    for (i = 0; i < pastaChecks.length; i++) { // loop through all 
+      if (limit1 == parseInt(pasta.pastacount)) {
+        if (!pastaChecks[i].checked) {
+          pastaChecks[i].disabled = true; // and disable unchecked pastaChecks
+        }  
+      } else { //if limit is less than two  
+        if (!pastaChecks[i].checked) {
+          pastaChecks[i].disabled = false; // enable unchecked pastaChecks
+        }  
+      }
+    }
+  }
+  for (i = 0; i < pizzaChecks.length; i++) {
+    pizzaChecks[i].onclick = function() { //call function on click and send current element as param
+        pizzaChecker(this);
+    }
+  }
+
+  for (i = 0; i < pastaChecks.length; i++) {
+    pastaChecks[i].onclick = function() { //call function on click and send current element as param
+        pastaChecker(this);
+    }
+  }
+    });
+  </script>

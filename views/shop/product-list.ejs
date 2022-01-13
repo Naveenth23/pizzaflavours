@@ -1,6 +1,6 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
-<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/cart_bg.jpg">
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/cart_bg.jpeg">
     <div class="container"><!-- STRART CONTAINER -->
         <div class="row">
             <div class="col-sm-12">
@@ -19,16 +19,66 @@
 <div class="section pb_70">
 	<div class="container">
         <% for(let cat of Object.values(category)) {%>
-            <% if (familyPack.length > 0) { %>
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                        <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
-                            <div class="heading_s1">
-                                <h2><%= cat.category %></h2>
+            <% if (cat.slug === 'SPECIAL DEALS' && specialDeals.length > 0) { %>
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                        <div class="heading_s1">
+                            <h2><%= cat.category %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="FamilyPack" role="tabpanel" aria-labelledby="FamilyPack-tab">
+                            <div class="row">
+                                    <% for (let deals of specialDeals) { %>      
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="single_product">
+                                                <div class="menu_product_img">
+                                                    <%if(deals.images) { %>
+                                                        <img src="<%= deals.images %>" alt="<%= deals.itemName %>">
+                                                    <% }else{ %>
+                                                        <img src="/images/circle.png" alt="<%= deals.itemName %>">
+                                                    <% } %>
+                                                    <div class="action_btn"><a href = "javascript:void(0);" onclick="showAddToCartModal('<%= JSON.stringify(deals) %>')" class="special-deals btn btn-default">Add To Cart</a></div>
+                                                </div>
+                                                <div class="menu_product_info">
+                                                    <div class="title">
+                                                        <h5><a href = "javascript:void(0);" onclick="showAddToCartModal('<%= JSON.stringify(deals) %>')"><%= deals.itemName %></a></h5>
+                                                    </div>
+                                                </div>
+                                                <div class="menu_footer">
+                                                    <div class="rate">
+                                                        <div class="product rate" style="width:68%"></div>
+                                                    </div>
+                                                    <div class="price">
+                                                        <span>$<%= deals.price %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <% } %>
+            <% if (familyPack.length > 0) { %>
+                <% if (cat.slug != 'SPECIAL DEALS') { %>
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="heading_tab_header animation" data-animation="fadeInUp" data-animation-delay="0.02s">
+                                <div class="heading_s1">
+                                    <h2><%= cat.category %></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
                 <div class="row">
                     <div class="col-12">
                         <div class="tab-content">
@@ -36,7 +86,39 @@
                                 <div class="row">
                                         <% for (let fmly of familyPack) { %>                                            
                                             <% if (cat.slug === fmly.category) { %>
+                                                <% if (fmly.category ==='STONE BAKED PIZZAS') { %>
                                                 <div class="col-lg-3 col-sm-6">
+                                                    <div class="single_product">
+                                                        <div class="menu_product_img">
+                                                            <%if(fmly.images) { %>
+                                                                <img src="<%= fmly.images %>" alt="<%= fmly.itemName %>">
+                                                            <% }else{ %>
+                                                                <img src="/images/circle.png" alt="<%= fmly.itemName %>">
+                                                            <% } %>
+                                                            <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-cart-button btn btn-default">Add To Cart</a></div>
+                                                        </div>
+                                                        <div class="menu_product_info">
+                                                            <div class="title">
+                                                                <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-cart-button"><%= fmly.itemName %></a></h5>
+                                                            </div>
+                                                                <a href ="javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-cart-button">
+                                                                    <div class="product-description">
+                                                                        <p><%= fmly.description %></p>
+                                                                    </div>
+                                                                </a>
+                                                        </div>
+                                                        <div class="menu_footer">
+                                                            <div class="rate">
+                                                                <div class="product rate" style="width:68%"></div>
+                                                            </div>
+                                                            <div class="price">
+                                                                <span>$<%= fmly.price %></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }else{ %> 
+                                                    <div class="col-lg-3 col-sm-6">
                                                         <div class="single_product">
                                                             <div class="menu_product_img">
                                                                 <%if(fmly.images) { %>
@@ -44,17 +126,17 @@
                                                                 <% }else{ %>
                                                                     <img src="/images/circle.png" alt="<%= fmly.itemName %>">
                                                                 <% } %>
-                                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card btn btn-white">Add To Cart</a></div>
+                                                                <div class="action_btn"><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card btn btn-default">Add To Cart</a></div>
                                                             </div>
                                                             <div class="menu_product_info">
                                                                 <div class="title">
                                                                     <h5><a href = "javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card"><%= fmly.itemName %></a></h5>
                                                                 </div>
-                                                                <a href ="javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card">
-                                                                    <div class="product-description">
-                                                                        <p><%= fmly.description %></p>
-                                                                    </div>
-                                                                </a>
+                                                                    <a href ="javascript:void(0);" data-pizza="<%= JSON.stringify(fmly) %>" class="add-to-card">
+                                                                        <div class="product-description">
+                                                                            <p><%= fmly.description %></p>
+                                                                        </div>
+                                                                    </a>
                                                             </div>
                                                             <div class="menu_footer">
                                                                 <div class="rate">
@@ -65,7 +147,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                </div>
+                                                    </div>
+                                                    <% } %> 
                                             <% } %> 
                                         <% } %>
                                 </div>
@@ -78,8 +161,186 @@
     </div>
 </div>
         
+<div id="popup" style="display:none;">
+    <form id="option-cart-form">
+        <input type="hidden" name="id" id="id" class="hiddenValue" value="" />
+        <input type="hidden" name="price" id="price" class="price" value="" />
+        <input type="hidden" name="category" id="category" class="category" value="" />
+        <input type="hidden" name="itemName" id="itemName" class="itemName" value="" />
+        <input type="hidden" name="ingredient" class="ingredientList" id="ingredientList" value="" />
+        <div class="heading_s1">
+            <h4>Ingredients</h4>
+        </div>
+        <div id="ingredients">
+            <div class="table-responsive order_table">
+                <table class="ingredient-table">
+                    <thead>
+                    </thead>
+                </table>
+            </div>
+        </div>
 
+        <% for (let topping of toppings) { %>    
+            <div class="heading_s1">
+                <h4><%= topping.toppingCategoryName %></h4>
+            </div>
+            <div class="topping-items">
+                <div class="table-responsive order_table">
+                    <table class="topping-table">
+                        <thead>
+                            <% for(let items of Object.values(topping.topping)) {%>
+                            <tr>
+                                <th width="80%">
+                                    <input type="checkbox" class="toppings" value="<%= items.toppingName %>,<%= topping.toppingCategoryName %>,<%= items.price %>,1,1" name="topping" id="toppings">
+                                    <label for="toppings"><span><%= items.toppingName %></span></label>
+                                </th>
+                                <th width="20%">$<%= items.price %></th>
+                            </tr>
+                            <% } %>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        <%  } %>
+        <div class="form-group col-md-12">
+            <button type="button" class="btn btn-default mycart" id="mycart">
+                Add To Cart
+            </button>
+        </div>
+        <!-- <% for (let topping of toppings) { %>    
+            <div class="form-group col-md-12">
+                <div class="chek-form">
+                        <input class="form-check-input toppings" type="checkbox" value="<%= topping.price %>" name="topping[]" id="createaccount">
+                        <label class="form-check-label label_info" for="createaccount"><span><%= topping.toppingName %></span></label>
+                </div>
+            </div>
+        <%  } %> -->
+    </form>
+</div>
+
+<div id="popup2" style="display:none;">
+    <form id="special-deals-form">
+        <input type="hidden" name="specialList" class="specialList" id="specialList" value="" />
+        <input type="hidden" name="id" id="id" class="hiddenValue" value="" />
+        <input type="hidden" name="price" id="price" class="price" value="" />
+        <input type="hidden" name="itemName" id="itemName" class="itemName" value="" />
+        <div id="addToCart-modal-body">
+            
+        </div>
+        <div class="form-group col-md-12">
+            <div class="form-group col-md-12">
+                <button type="button" class="btn btn-default specialdeals" id="specialdeals">
+                    Add To Cart
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 
+<div id="popup2" style="display:none;">
+    <form method="post" action="/special-deals">
+        <input type="text" name="specialList" class="specialList" id="specialList" value="" />
+        <div id="addToCart-modal-body">
+            
+        </div>
+        <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-default">
+                Add To Cart
+            </button>
+        </div>
+    </form>
+</div> -->
+
+<script src="/js/vendor.min.js"></script>
+<script src="/js/plugins.min.js"></script>
+<script src="/js/main.js"></script>
+<script type="text/javascript">
+
+    $('body').delegate('.checkPizza input[type="checkbox"]','change',function(e){ 
+        if ($(this).is(":checked")){ 
+            $(this).parent().next('.pizza-toppings').removeClass('hidden-list')
+        }else{
+            $(this).parent().next('.pizza-toppings').addClass('hidden-list')
+        }
+    });
+
+    let toppings = $('.toppings');
+    let ingArray = [];
+    $('body').delegate('.ingredient','change',function(e){ 
+        if (!$(this).is(":checked")){        
+        let test =  $(this).val();
+        ingArray.push(test+",No");
+        //$('.ingredientList').val();
+        $('.ingredientList').val(ingArray.join('-').toString())
+    }else{
+        ingArray = ingArray.filter(e => e !== $(this).val()+",No");
+        //$('.ingredientList').val();
+        $('.ingredientList').val(ingArray.join('-').toString())
+    }
+    });
     
+    var options = {
+        appendTo: $("#option-cart-form"),
+        type: "html",
+        htmlSelector: "#popup"
+    };
+
+    var options2 = {
+        appendTo: $("#option-cart-form"),
+        type: "html",
+        htmlSelector: "#popup2"
+    };
+
+    function showAddToCartModal(items){
+        if(!$('#modal-size').hasClass('modal-lg')){
+            $('#modal-size').addClass('modal-lg');
+        }
+        $('#addToCart-modal-body').html(null);
+        $('#addToCart').modal();
+        var pizza = JSON.parse(items);
+        $('.hiddenValue').val(pizza.id);
+        $('.price').val(pizza.price);
+        $('.itemName').val(pizza.itemName);
+        var pizzacount = JSON.parse(pizza.pizzacount);
+        var garliccount = JSON.parse(pizza.garliccount);
+        var drinkcount = JSON.parse(pizza.drinkcount);
+        var pastacount = JSON.parse(pizza.pastacount);
+        $.post('/getItems', {pizza:pizzacount,garlic:garliccount,drink:drinkcount,pasta:pastacount}, function(data){
+            $('#addToCart-modal-body').html(data);
+            $(this).simplePopup(options2);
+        });
+    }
+    $('body').delegate('a.special-deals','click',function(e){  
+        e.preventDefault();
+        var id  = $(this).attr("data-pizza")
+        var pizza = JSON.parse(id);
+        var pizzacount = JSON.parse(pizza.pizzacount);
+        $('.hiddenValue').val(pizza.id);
+        $('.price').val(pizza.price);
+        $('.itemName').val(pizza.itemName);
+        $('.category').val(pizza.category);
+        $('.ingredient-table th').remove();
+        $(this).simplePopup(options2);
+    });
+
+    $('body').delegate('a.add-to-cart-button','click',function(e){  
+        e.preventDefault();
+        var id  = $(this).attr("data-pizza")
+        var pizza = JSON.parse(id);
+        $('.hiddenValue').val(pizza.id);
+        $('.price').val(pizza.price);
+        $('.itemName').val(pizza.itemName);
+        $('.category').val(pizza.category);
+        $('.ingredient-table th').remove();
+        jQuery.each(pizza.ingredients, function(i, val) {
+            $('.ingredient-table thead')
+            .append(`<th><input type="checkbox" id="ingredient" class="ingredient" name="ingredient1" value="${val}" checked><label><span>${val}</span></label></th>`)		  
+		});
+        $(this).simplePopup(options);
+    });
+    
+</script>
 
 <%- include('../includes/foot.ejs') %>
 <%- include('../includes/end.ejs') %>

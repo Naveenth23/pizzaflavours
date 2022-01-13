@@ -584,7 +584,7 @@ button:focus {
 }
 .btn-dark {
 	background-color: transparent;
-	border: 1px solid #800000;
+	border: 1px solid #E50708;
 	color: #fff !important;
 	overflow: hidden;
 	position: relative;
@@ -600,7 +600,7 @@ button:focus {
 	width: 100%;
 	z-index: -1;
 	content: '';
-	background-color: #800000;
+	background-color: #E50708;
 	transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
 }
 .btn-dark:hover {
@@ -1618,7 +1618,7 @@ button:focus {
 	top: -3px;
 	left: -5px;
 	font-size: 11px;
-	background-color: #800000!important;
+	background-color: #E50708!important;
 	border-radius: 50px;
 	height: 16px;
 	line-height: 16px;
@@ -5867,6 +5867,93 @@ footer .widget_title {
 .shop_cart_table .table {
 	margin: 0;
 }
+
+.topping-table {
+    width: 100%;
+    color: #212529;
+}
+
+.pizza-toppings ul {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 19px 0 0 0;
+	margin: 0;
+	list-style: none;
+}
+.hidden-list{
+	display:none;
+}
+#spinner {
+	width:30px;
+	height:30px;
+	background-image: url('https://i.imgur.com/e0wSH2U.png');
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -15px;
+	margin-top: -15px;
+}
+.pizza-toppings ul li {
+	color: #3a3a3a;
+	list-style: outside none none;
+	margin: 0 0 6px;
+	display: block;
+}
+.pizza-toppings .title-wrap::before {
+	background-color: #e3e1e1;
+	content: "";
+	height: 1px;
+	left: 0;
+	position: absolute;
+	top: 13px;
+	-webkit-transition: all .4s ease 0s;
+	transition: all .4s ease 0s;
+	width: 100%;
+	z-index: 1;
+}
+.pizza-toppings .title-wrap h5.cart-bottom-title {
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0;
+	padding:10px;
+	background-color: #ebebeb;
+	position: relative;
+	z-index: 1;
+	color: #000;
+}
+
+.pizza-toppings ul li input {
+	background: #e9e9e9 none repeat scroll 0 0;
+	border: 1px solid #d7d7d7;
+	border-radius: 5px !important;
+	color: #3a3a3a;
+	cursor: pointer;
+	height: 13px;
+	margin-right: 10px;
+	padding: 0;
+	position: relative;
+	top: 2px;
+	width: 13px;
+}
+
+.pizza-toppings ul li span {
+	float: right;
+}
+
+.topping-table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+	border-bottom-width: 1px;
+    font-weight: 600;	
+}
+
+.topping-table td, .topping-table thead th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
 .toggle_info {
 	padding: 20px;
 	background-color: #fff;
@@ -5909,6 +5996,11 @@ label.label_info {
 }
 .product-subtotal {
 	font-weight: 600;
+}
+
+.topping-items{
+	box-shadow: 0 0 10px rgba(0,0,0,0.2);
+	margin-bottom:1rem;
 }
 .order_review {
 	box-shadow: 0 0 10px rgba(0,0,0,0.2);

@@ -14,7 +14,7 @@ function cartController() {
 					items: {},
 					totalQty: 0,
 					totalPrice: 0,
-					shippingCharge: 0,
+					shippingCharge: 0,					
 				}
 			}
 			let { cart } = req.session;
@@ -23,16 +23,17 @@ function cartController() {
 					item: req.body,
 					note: '',
 					qty: 1,
+					type: 'other',
 				}
 				cart.totalQty += 1;
 				cart.totalPrice += parseFloat(price);
-				//cart.shippingCharge= 0;
 			}
 			else {
 				cart.items[id].qty += 1;
 				//cart.totalQty +=1;
 				cart.totalPrice += parseFloat(price);
-				//cart.shippingCharge = 0;
+				// cart.items[id].extraTopping = toppings;
+				// cart.items[id].ingredient = ingredients;
 			}
 			
 			return res.json({
@@ -82,7 +83,6 @@ function cartController() {
 			const { cart } = req.session;
 			let id = req.body.id;
 			cart.items[id].note = req.body.note;
-			console.log(req.session.cart);
 			return res.redirect('/cart');
 		},		
 		updateTotal(req, res) {

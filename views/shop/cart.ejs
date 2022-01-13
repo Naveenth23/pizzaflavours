@@ -1,7 +1,7 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
 
-<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/slider/banner4.jpeg">
+<div class="breadcrumb_section background_bg overlay_bg_50 page_title_light" data-img-src="/images/cart_bg.jpeg">
     <div class="container"><!-- STRART CONTAINER -->
         <div class="row">
             <div class="col-sm-12">
@@ -134,16 +134,16 @@
         });
     }
 
-    function showAddToCartModal(id){
-        if(!$('#modal-size').hasClass('modal-lg')){
-            $('#modal-size').addClass('modal-lg');
-        }
-        $('#addToCart-modal-body').html(null);
-        $('#addToCart').modal();
-        $.post('showCartModal', {id:id}, function(data){
-            $('#addToCart-modal-body').html(data);
-        });
-    }
+    // function showAddToCartModal(id){
+    //     if(!$('#modal-size').hasClass('modal-lg')){
+    //         $('#modal-size').addClass('modal-lg');
+    //     }
+    //     $('#addToCart-modal-body').html(null);
+    //     $('#addToCart').modal();
+    //     $.post('showCartModal', {id:id}, function(data){
+    //         $('#addToCart-modal-body').html(data);
+    //     });
+    // }
 
     function removeFromCartView(e, key){
         e.preventDefault();

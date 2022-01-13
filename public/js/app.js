@@ -26528,11 +26528,72 @@
     var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
     
     var initAdmin = __webpack_require__(/*! ./admin */ "./resources/js/admin.js");
-    
-    
+        
     var addToCart = document.querySelectorAll('.add-to-card');
     var cartCounter = document.querySelector('#cart-counter');
-    
+    $(document).on("click", "#mycart", function(event){
+        $('#addToCart').modal();
+        $('.c-preloader').show();
+        var toppings = new Array();
+        $('#option-cart-form input[name=topping]:checked').each(function() { // find unique names
+            toppings.push($(this).val());
+        });
+        let ingredientList=$('#ingredientList').val()
+        let id=$('#id').val()
+        let price=$('#price').val()
+        let itemName=$('#itemName').val()
+        let category=$('#category').val()
+        toppings = JSON.stringify(toppings);
+        $.ajax({
+            type:"POST",
+            url: 'update-cart',
+            dataType: 'json',
+            data: {"id":id,"itemName":itemName,"category":category,"toppings":toppings,"ingredients":ingredientList,"price":price},
+            success: function(data){
+                new Noty({
+                type: 'success',
+                layout: 'topRight',
+                timeout: 1000,
+                theme: 'relax',
+                text: 'Item added to cart',
+                progressBar: false
+                }).show();
+                $('.close').trigger('click');
+                cartCounter.innerText = data.totalQty;
+            }
+        });
+    });
+
+    $(document).on("click", "#specialdeals", function(event){
+        let specialDeals=$('#specialList').val()
+        let id=$('#id').val();
+        specialDeals = JSON.stringify(specialDeals);
+        let price=$('#price').val();
+        let itemName=$('#itemName').val()
+        let garlic = document.querySelector('#garlic_bread');
+        let drink = document.querySelector('#coke_drink');
+        garlic = JSON.stringify(garlic.value);
+        drink = JSON.stringify(drink.value);
+        $.ajax({
+            type:"POST",
+            url: 'special-deals',
+            dataType: 'json',
+            data: {"id":id,"itemName":itemName,"garlic":garlic,"drink":drink,"specialDeals":specialDeals,"price":price},
+            success: function(data){
+                new Noty({
+                type: 'success',
+                layout: 'topRight',
+                timeout: 1000,
+                theme: 'relax',
+                text: 'Item added to cart',
+                progressBar: false
+                }).show();
+                $('.close').trigger('click');
+                cartCounter.innerText = data.totalQty;
+            }
+        });
+    });
+
     var updateCart = function updateCart(pizza) {
       axios.post('/update-cart', pizza).then(function (res) {
         cartCounter.innerText = res.data.totalQty;
@@ -26677,16 +26738,7 @@
         xhr.send(JSON.stringify(formData));
     });
     
-
-    
-    
-     
     // Booking Form
-    
-    
-
-    
-
     var statuses = document.querySelectorAll('.status_line');
     var hiddenInput = document.querySelector('#hiddenInput');
     var order = hiddenInput ? hiddenInput.value : null;
