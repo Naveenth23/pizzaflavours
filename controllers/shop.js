@@ -21,7 +21,7 @@ const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65
 
 const getIndex = async (req, res, next) => {
     res.render('shop/index', {
-        pageTitle: 'Shop',
+        pageTitle: 'Byford Pizzeria Online',
         path: '/'
     });
 };
@@ -106,7 +106,7 @@ const getAllItems = async (req, res, next) => {
             specialDeals: specialDealsArray,
             toppingCategories: toppingCategoryArray,
             category: category,
-            pageTitle: 'Shop',
+            pageTitle: 'Byford Pizzeria Online Menu',
             path: '/products',
             hasItems: familyPack.length > 0,
             activeShop: true,
@@ -366,7 +366,7 @@ const addToCart = async (req, res, next) => {
 }
 
 const getCart = async (req, res, next) => {
-    res.render('shop/cart', { cart: Cart.getCart(), pageTitle: 'Shopping Cart Detail', path: '/cart', name: 'Edward' })
+    res.render('shop/cart', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria Online Cart', path: '/cart', name: 'Edward' })
 }
 
 const getCheckout = async(req, res, next) => {
@@ -376,11 +376,11 @@ const getCheckout = async(req, res, next) => {
         return res.redirect('/menu');
     }
     const { cart } = req.session;
-    res.render('shop/checkout', { delivery: delivery, pageTitle: 'Shopping Cart Detail', path: '/cart', name: 'Edward' })
+    res.render('shop/checkout', { delivery: delivery, pageTitle: 'Byford Pizzeria Online Checkout', path: '/cart', name: 'Edward' })
 };
 
 const orderConfirm = async(req, res, next) => {
-    res.render('shop/confirm', { cart: Cart.getCart(), pageTitle: 'Thankyou', path: '/shop', name: '' })
+    res.render('shop/confirm', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria Online Confirm', path: '/shop', name: '' })
 };
 
 const getCheckoutSuccess = async(req, res, next) => {
@@ -510,7 +510,7 @@ const getInvoice = async (req, res, next) => {
 };
 
 const contact = async(req, res, next) => {
-    res.render('shop/contact', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria', path: '/shop', name: '' })
+    res.render('shop/contact', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria Online Contact', path: '/shop', name: '' })
 };
 
 const postContact = async (req, res, next) => {

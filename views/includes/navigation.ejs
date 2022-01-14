@@ -5,7 +5,38 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <ul class="contact_detail text-center text-lg-left">
-                        <li><i class="ti-time"></i>Timing: 4:30 PM - 8:30 PM</li>
+                        <li><i class="ti-time"></i>
+                            <span id="opening-day"></span>
+                            :&nbsp;<span id="opening-time"></span></li>
+                            <script>
+                                let weekday = ['Sunday',
+                                'Monday',
+                                'Tuesday',
+                                'Wednesday',
+                                'Thursday',
+                                'Friday',
+                                'Saturday'][new Date().getDay()];
+
+                                var today = new Date();
+                                if(today.getDay() == 6){
+                                    document.getElementById('opening-time').innerHTML = '4:00 - 9:30 PM';
+                                }else if(today.getDay() == 5){
+                                    document.getElementById('opening-time').innerHTML = '4:00 - 9:30 PM';
+                                }else if(today.getDay() == 0){
+                                    document.getElementById('opening-time').innerHTML = '4:00 - 8:30 PM';
+                                }else if(today.getDay() == 1){
+                                    document.getElementById('opening-time').innerHTML = 'Closed';
+                                }else if(today.getDay() == 2){
+                                    document.getElementById('opening-time').innerHTML = '4:00 - 8:30 PM';
+                                }else if(today.getDay() == 3){
+                                    document.getElementById('opening-time').innerHTML = '4:00 - 8:30 PM';
+                                }else if(today.getDay() == 4){
+                                    document.getElementById('opening-time').innerHTML = '4:00 - 8:30 PM';
+                                }
+
+                                document.getElementById('opening-day').innerHTML = weekday;
+    
+                             </script>
                     </ul>
                 </div>
                 <div class="col-md-6">
