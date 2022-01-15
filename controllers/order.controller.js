@@ -15,12 +15,40 @@ function orderController(){
 			
 			const lineItems = [];
 			for(let productId of Object.values(req.session.cart.items)) {	
+				let totalAmount = 0;
+				if(productId.type === 'deals'){
+                    totalAmount = totalAmount + (productId.item.price * productId.qty);
+                    if(productId.item.deals.length >0){
+                        for(let items1 of Object.values(productId.item.deals)) {
+                            let extraTopping = JSON.parse(items1).extraTopping ? JSON.parse(items1).extraTopping : [];
+
+                            if(extraTopping.length >0){
+                                for(let t of extraTopping) {
+                                    let test1 = t.split(',');
+                                    totalAmount +=parseFloat(test1[2]);
+                                }
+                            }						
+                        }
+                    }	
+                }
+                
+                if(productId.type === 'other'){
+                    console.log('test');
+                    if (productId.item.toppings.length > 0) {				
+                        let extraTopping = JSON.parse(productId.item.toppings);
+                        for(let t of extraTopping) {
+                            let test1 = t.split(',');
+                            totalAmount +=parseFloat(test1[2]);
+                        }
+                    }
+                    totalAmount = totalAmount + (productId.item.price * productId.qty);
+                }
 				//Retrieve price object from stripe API:
 				const price = parseFloat(productId.item.price)* 100;
 				const product =	productId.item.id;
 				const productName = productId.item.itemName;
 				const productImage = 'test2';
-				const productPrice = parseFloat(productId.item.price)* 100;
+				const productPrice = parseFloat(productId.item.price) + totalAmount* 100;
 				const productQuantity = productId.qty;
 				lineItems.push({
 					price_data: {
@@ -87,8 +115,7 @@ function orderController(){
 			// 	return res.redirect('/checkout');
 			// }
 			const data = req.body;
-				let count = 0
-				let toppingAmount = 0;				
+				let count = 0;		
 			for (let productId in req.session.cart.items) {
 				count += req.session.cart.items[productId].qty;
 			}
@@ -105,7 +132,6 @@ function orderController(){
 										let test1 = t.split(',');
 										totalAmount +=parseFloat(test1[2]);
 									}
-									console.log(toppingAmount);
 								}						
 							}
 						}	
@@ -123,9 +149,6 @@ function orderController(){
 						totalAmount = totalAmount + (productId.item.price * productId.qty);
 					}
 				}
-				//totalAmount = totalAmount + test;
-			//totalAmount = totalAmount + toppingAmount;
-			console.log(totalAmount);
 			try {
 				if(ordertype ==='delivery'){
 					if(!city || !postcode) {
@@ -136,7 +159,23 @@ function orderController(){
 				req.session.order = {
 					orderType: order_type,
 				};
-				if(ordertype ==='pickup' && pickupType==='pay_at_counter')
+
+				let userDocRef = firestore.collection('users').doc();
+				req.session.user_id = userDocRef.id
+				req.session.user = userDocRef.id;
+				req.session.order = {
+					orderType: order_type,
+				};
+				userDocRef.set({
+					documentId: userDocRef.id,
+					creationByUid: userDocRef.id,
+					name: name,
+					mobileNumber: mobileNumber,
+					address: address+','+city+','+postcode,
+					creationDate: firebase1.firestore.FieldValue.serverTimestamp(),
+					role: 'USER'
+				})
+				if(ordertype ==='pickup' && pickupType==='pay_at_counter' || ordertype ==='delivery')
 				{
 					const lastOneRes = await firestore.collection('orders').orderBy('creationDate', 'desc').limit(1).get();
 					let ordrNo = '';
@@ -171,7 +210,7 @@ function orderController(){
 						discountType: '',
 						discountValue: '',
 						documentId: orderDocRef.id,
-						netAmount: '',
+						netAmount: totalAmount.toString(),
 						price: totalAmount.toString(),
 						orderForm: 'WEB',
 						orderNumber: orderNumber,

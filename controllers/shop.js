@@ -311,12 +311,12 @@ const specialDeals = async (req, res, next) => {
             for (index = 0; index < element.toppings.length; index++) {
                 var str = element.toppings[index];
                 var arr = str.split(",");
-                price += parseFloat(arr[2]);
+                //price += parseFloat(arr[2]);
             }
             myJson = JSON.stringify({'id':element.id,'itemName':element.itemName, 'price':element.price, 'extraTopping':element.toppings, 'ingredients':element.newingredients});
             test32.push(myJson);
         });
-
+        
         test32.push(garlic);
         test32.push(drink);
         var mydeal = {'id':specialdeals.id,'itemName':specialdeals.itemName, 'price':price,'deals':test32};
@@ -414,43 +414,157 @@ const getCheckoutSuccess = async(req, res, next) => {
 			
 			newdate = year+""+month+""+day;
             const orderNumber = "O-"+newdate+"-0"+increasedNum;
-            const totalPrice = req.session.cart.shippingCharge+req.session.cart.totalPrice;
+            
+            let totalAmount = 0;
+            for(let productId of Object.values(req.session.cart.items)) {
+                if(productId.type === 'deals'){
+                    totalAmount = totalAmount + (productId.item.price * productId.qty);
+                    if(productId.item.deals.length >0){
+                        for(let items1 of Object.values(productId.item.deals)) {
+                            let extraTopping = JSON.parse(items1).extraTopping ? JSON.parse(items1).extraTopping : [];
+
+                            if(extraTopping.length >0){
+                                for(let t of extraTopping) {
+                                    let test1 = t.split(',');
+                                    totalAmount +=parseFloat(test1[2]);
+                                }
+                                console.log(toppingAmount);
+                            }						
+                        }
+                    }	
+                }
+                
+                if(productId.type === 'other'){
+                    console.log('test');
+                    if (productId.item.toppings.length > 0) {				
+                        let extraTopping = JSON.parse(productId.item.toppings);
+                        for(let t of extraTopping) {
+                            let test1 = t.split(',');
+                            totalAmount +=parseFloat(test1[2]);
+                        }
+                    }
+                    totalAmount = totalAmount + (productId.item.price * productId.qty);
+                }
+            }
+            totalAmount = totalAmount;
+            var deliveryTiming = year+"-"+month+"-"+day+" "+dateObj.getUTCHours()+":"+dateObj.getUTCMinutes()+":"+dateObj.getUTCSeconds()+"."+Math.floor(100000 + Math.random() * 900000);
         orderDocRef.set({
             collected: 'No',            
             count: count,
             createdBy: data.data().name,
-            creationByUid: id,
+            creationByUid: '',
             creationDate: firebase1.firestore.FieldValue.serverTimestamp(),
             customerAddress: data.data().address,
             customerName: data.data().name,
             customerPhoneNumber: data.data().mobileNumber,
             deliveryAmount: req.session.cart.shippingCharge.toString(),
-            deliveryTiming: firebase1.firestore.FieldValue.serverTimestamp(),
+            deliveryTiming: deliveryTiming,
             documentId: orderDocRef.id,
+            discountType: '',
+            discountValue: '',
             orderFrom: 'WEB',
             orderNumber: orderNumber,
             orderType: req.session.order.orderType,
             paidType:'Stripe',
-            price: totalPrice.toString(),
+            netAmount: (totalAmount+req.session.cart.shippingCharge).toString(),
+            price: totalAmount.toString(),
             status: 'PENDING',
             tableNumber:''
         })
-        let orderItemEntity = {};
-        for(let productId of Object.values(req.session.cart.items)) {					
-            orderItemEntity['count'] = productId.qty;				
-            orderItemEntity['createdBy'] = data.data().name;
-            orderItemEntity['creationByUid'] = id;
-            orderItemEntity['creationDate'] = firebase1.firestore.FieldValue.serverTimestamp();
-            orderItemEntity['discount'] = '';
-            orderItemEntity['name'] = productId.item.itemName;
-            orderItemEntity['note'] = productId.note;
-            orderItemEntity['orderId'] = orderDocRef.id;
-            orderItemEntity['orderItemId'] = productId.item.id;	
-            orderItemEntity['price'] = productId.item.price;
-            orderItemEntity['totalPrice'] = productId.item.price * productId.qty;
-           firestore.collection("orderitems").add(orderItemEntity)
+
+        for(let productId of Object.values(req.session.cart.items)) {
+            let orderItemEntity = {};
+            if(productId.type === 'deals'){
+                let dealOrder = {};
+            
+                dealOrder['category'] = 'SPECIAL DEALS';
+                dealOrder['count'] = '1';
+                dealOrder['createdBy'] = 'User';
+                dealOrder['creationByUid'] = '';
+                dealOrder['creationDate'] = firebase1.firestore.FieldValue.serverTimestamp(),
+                dealOrder['description'] = '';
+                dealOrder['documentId'] = '3232';
+                dealOrder['itemName'] = productId.item.itemName;
+                dealOrder['orderId'] = orderDocRef.id;
+                dealOrder['price'] = productId.item.price.toString();
+              
+              const { id } = await firestore.collection("dealorders").add(dealOrder);
+              dealOrder['documentId'] =  id;
+              firestore.collection("dealorders").doc(id).update(dealOrder);
+                if(productId.item.deals.length >0){
+                    for(let items1 of Object.values(productId.item.deals)) {
+                        let dealorderItemEntity = {};
+                        dealorderItemEntity['category'] = 'STONE BAKED PIZZAS';
+                        dealorderItemEntity['count'] = 1;
+                        dealorderItemEntity['createdBy'] = '';
+                        dealorderItemEntity['creationByUid'] = '';
+                        dealorderItemEntity['creationDate'] = firebase1.firestore.FieldValue.serverTimestamp();
+                        dealorderItemEntity['dealId'] = id;
+                        dealorderItemEntity['discount'] = '0';
+                        dealorderItemEntity['documentId'] = '';
+                        dealorderItemEntity['note'] = '';
+                        dealorderItemEntity['orderId'] = orderDocRef.id;
+                        dealorderItemEntity['id'] = JSON.parse(items1).id;
+                        dealorderItemEntity['name'] =JSON.parse(items1).itemName;							
+                        dealorderItemEntity['extraTopping'] = JSON.parse(items1).extraTopping ? JSON.parse(items1).extraTopping : [];
+                        dealorderItemEntity['ingredient'] = JSON.parse(items1).ingredients ? JSON.parse(items1).ingredients : [];
+                        firestore.collection("dealorderitems").add(dealorderItemEntity).then((value)=> {
+                            dealorderItemEntity['documentId'] =  value.id
+                        firestore.collection("dealorderitems").doc(value.id).update(dealorderItemEntity);
+                        });								
+                    }
+                }
+
+            }
+            if(productId.type ==='other'){
+                orderItemEntity['category'] = productId.item.category;
+                orderItemEntity['count'] = productId.qty;
+                orderItemEntity['createdBy'] = '';
+                orderItemEntity['creationByUid'] = '';					
+                orderItemEntity['creationDate'] = firebase1.firestore.FieldValue.serverTimestamp();
+                orderItemEntity['discount'] = '0';
+                orderItemEntity['documentId'] = 'eR8ZGMykz7PJdimiL3Pe';					
+                if (productId.item.toppings.length > 0) {				
+                    orderItemEntity['extraTopping'] = JSON.parse(productId.item.toppings);
+                }else{
+                    orderItemEntity['extraTopping'] = [];
+                }
+                if (productId.item.ingredients.length > 0) {		
+                    orderItemEntity['ingredient'] = productId.item.ingredients.split('-');
+                }else{
+                    orderItemEntity['ingredient'] = [];
+                }
+                orderItemEntity['name'] = productId.item.itemName;
+                orderItemEntity['note'] = productId.note;
+                orderItemEntity['orderId'] = orderDocRef.id;
+                orderItemEntity['orderItemId'] = productId.item.id;
+                orderItemEntity['price'] = productId.item.price;
+                orderItemEntity['toppingLimit'] = "0";
+                orderItemEntity['totalPrice'] = (parseFloat(productId.item.price) * productId.qty);
+
+                const { id } = await firestore.collection("orderitems").add(orderItemEntity);
+                orderItemEntity['documentId'] =  id;
+                firestore.collection("orderitems").doc(id).update(orderItemEntity);
+            }
         }
-        await firestore.collection('users').doc(id).delete();
+
+
+        // let orderItemEntity = {};
+        // for(let productId of Object.values(req.session.cart.items)) {					
+        //     orderItemEntity['count'] = productId.qty;				
+        //     orderItemEntity['createdBy'] = data.data().name;
+        //     orderItemEntity['creationByUid'] = id;
+        //     orderItemEntity['creationDate'] = firebase1.firestore.FieldValue.serverTimestamp();
+        //     orderItemEntity['discount'] = '';
+        //     orderItemEntity['name'] = productId.item.itemName;
+        //     orderItemEntity['note'] = productId.note;
+        //     orderItemEntity['orderId'] = orderDocRef.id;
+        //     orderItemEntity['orderItemId'] = productId.item.id;	
+        //     orderItemEntity['price'] = productId.item.price;
+        //     orderItemEntity['totalPrice'] = productId.item.price * productId.qty;
+        //    firestore.collection("orderitems").add(orderItemEntity)
+        // }
+        // await firestore.collection('users').doc(id).delete();
         delete req.session.cart;
         return res.redirect('/order/confirm');
     } catch (error) {

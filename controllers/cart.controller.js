@@ -9,6 +9,7 @@ function cartController() {
 		update(req, res) {
 			const { id, price } = req.body;
 			// First time creating cart and adding basic object structure
+
 			if(!req.session.cart) {
 				req.session.cart = {
 					items: {},
@@ -87,25 +88,28 @@ function cartController() {
 		},		
 		updateTotal(req, res) {
 			const { price } = req.body;
+			const { shipping } = req.body;
 			let { cart } = req.session;	
 			let total = 0
-			for (let productId in req.session.cart.items) {
-				total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
-			}		
-			cart.shippingCharge = parseFloat(price);
+			// for (let productId in req.session.cart.items) {
+			// 	total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
+			// }		
+			cart.shippingCharge = parseFloat(shipping);
 			return res.json({
-				total: (total+cart.shippingCharge).toFixed(2)
+				total: parseFloat(price).toFixed(2)
 			});
 		},
 		removeDelivery(req, res) {
 			let { cart } = req.session;	
+			const { price } = req.body;
 			let total = 0
-			for (let productId in req.session.cart.items) {
-				total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
-			}		
+			// for (let productId in req.session.cart.items) {
+			// 	total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
+			// }		
 			cart.shippingCharge = 0;
+			cart.totalPrice = price;
 			return res.json({
-				total: (total+cart.shippingCharge).toFixed(2)
+				total: parseFloat(price).toFixed(2)
 			});
 		},
 		getNote(req, res){

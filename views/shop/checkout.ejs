@@ -59,15 +59,15 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="form-group create-account col-md-12" id="create_account">
+                    <div class="form-group create-account col-md-12" id="create_account">
                         <div class="chek-form">
                             <div class="custome-radio">
                                 <input class="form-radio-input" type="radio" name="pickupType" value="pay_now" id="pay_now">
                                 <label class="form-radio-label label_info" for="pickupType"><span>Pay Now</span></label>
                             </div>
                         </div>
-                    </div> -->
-                    <div class="ship_detail col-md-12 form-group" style="display:none;">
+                    </div>
+                    <div class="ship_detail col-md-12 form-group">
                     	<div class="chek-form">
                             <div class="custome-checkbox">
                                 <input class="form-check-input" type="checkbox" value="delivery" name="ordertype" id="differentaddress">
@@ -76,6 +76,7 @@
                         </div>
                     </div>
                    	<div class="different_address col-md-12" id="different_address">
+                        <h4><p>Please Pay by cash or bank transfer when the pizza is delivered to your location.</p></h4>
                         <div class="form-group">
                             <input type="text" class="form-control" name="address" id="address" placeholder="Street name & Number *">
                         </div>
@@ -108,23 +109,53 @@
                             </thead>
                             <tbody>
                                 <% total = 0 %>
-                                <% test = 0 %>
                                 <% for(let pizza of Object.values(session.cart.items)) {%>
                                     <% total = total + pizza.item.price*pizza.qty %>
                                 <tr>
                                     <td><%= pizza.item.itemName %> <span class="product-qty">x <%= pizza.qty %></span></td>
                                     <td>$<%= pizza.item.price * pizza.qty %></td>
                                 </tr>
+                                <tr>
+                                    <% if(pizza.item.hasOwnProperty('deals')){ %>
+                                    <% for(let items1 of Object.values(pizza.item.deals)) { %>
+                                            <% if(JSON.parse(items1).extraTopping != undefined) { %>
+                                                <% if(JSON.parse(items1).extraTopping.length > 0) { %>
+                                                    <% var myarr = JSON.parse(items1).extraTopping; %>
+                                                    <% for(let itm of myarr) { %>
+                                                        <% var myarr = itm.split(","); %>
+                                                            <tr>
+                                                                <td class="cart_total_label"><%= myarr[0] %></td>
+                                                                <td class="cart_total_amount">$<%= myarr[2] %></td>
+                                                            </tr>
+                                                        <% total = total + parseFloat(myarr[2]) %>                                                  
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                    <% if(pizza.item.hasOwnProperty('toppings')){ %>
+                                        <% if(pizza.item.toppings.length > 0) { %>
+                                            <% for(let topping of JSON.parse(pizza.item.toppings)) { %>
+                                                <% var myarr = topping.split(","); %>
+                                                    <tr>
+                                                        <td class="cart_total_label"><%= myarr[0] %></td>
+                                                        <td class="cart_total_amount">$<%= myarr[2] %></td>
+                                                    </tr>
+                                                <% total = total + parseFloat(myarr[2]) %>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                </tr>
                                 <% } %>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Delivery</th>
-                                    <td id="delivery_charges">$0</td>
+                                    <td id="delivery_charges">$<span>0</span></td>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal" id="product-subtotal">$<%= (total+session.cart.shippingCharge).toFixed(2) %></td>
+                                    <td class="product-subtotal" id="product-subtotal">$<span><%= (total+session.cart.shippingCharge).toFixed(2) %></span></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -135,7 +166,7 @@
     </div>
 </div>
 
-<!-- <div id="popup" style="display:none;">
+<div id="popup" style="display:none;">
     <div class="heading_s1">
         <h4>DELIVERY AVAILABLE</h4>
     </div>
@@ -181,7 +212,7 @@
             <% } %>
         <% } %>
     </div>
-</div> -->
+</div>
 <%- include('../includes/foot.ejs') %>
 <%- include('../includes/end.ejs') %>
 
@@ -209,12 +240,12 @@
             var area = matches[0];
             var price = matches[1];
             var pincode = matches[2];
-            
+            var total_price = parseFloat($('#product-subtotal > span').html());
             $('#city').val(toTitleCase(area));
             $('#pincode').val(pincode);
-            $.post('update-total', { price:price}, function(data){
-                $('#delivery_charges').html('$'+price);
-                $('#product-subtotal').html('$'+data.total);
+            $('#delivery_charges > span').html(price);
+            $('#product-subtotal > span').html(total_price+parseFloat(price));
+            $.post('update-total', { price:total_price+parseFloat(price),shipping: parseFloat(price)}, function(data){
             });
             $('.close').trigger('click');
         } else {
@@ -258,9 +289,17 @@
     } else {
         $('#city').val('');
         $('#pincode').val('');
-        $.post('remove-delivery', function(data){
-            $('#delivery_charges').html('$0');
-            $('#product-subtotal').html('$'+data.total);
+       
+        
+        var price = parseFloat($('#delivery_charges > span').html());
+        var total_price = parseFloat($('#product-subtotal > span').html());
+        total_price = total_price - price;
+        $('#delivery_charges > span').html('0');
+        $('#product-subtotal > span').html(total_price);
+        //  $.post('remove-delivery', function(data){
+           
+        // });
+        $.post('remove-delivery', { price:total_price}, function(data){
         });
         $('#address').prop('required', false);
         different_address.style.display = "none";
