@@ -428,7 +428,6 @@ const getCheckoutSuccess = async(req, res, next) => {
                                     let test1 = t.split(',');
                                     totalAmount +=parseFloat(test1[2]);
                                 }
-                                console.log(toppingAmount);
                             }						
                         }
                     }	

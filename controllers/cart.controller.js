@@ -88,26 +88,19 @@ function cartController() {
 		},		
 		updateTotal(req, res) {
 			const { price } = req.body;
-			const { shipping } = req.body;
 			let { cart } = req.session;	
 			let total = 0
-			// for (let productId in req.session.cart.items) {
-			// 	total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
-			// }		
-			cart.shippingCharge = parseFloat(shipping);
+
+			if(cart.shippingCharge !=''){
+				req.session.cart.shippingCharge = 0;
+			}
 			return res.json({
+				shipping : 0,
 				total: parseFloat(price).toFixed(2)
 			});
 		},
 		removeDelivery(req, res) {
-			let { cart } = req.session;	
 			const { price } = req.body;
-			let total = 0
-			// for (let productId in req.session.cart.items) {
-			// 	total = total +req.session.cart.items[productId].item.price*req.session.cart.items[productId].qty;
-			// }		
-			cart.shippingCharge = 0;
-			cart.totalPrice = price;
 			return res.json({
 				total: parseFloat(price).toFixed(2)
 			});

@@ -8,94 +8,100 @@ const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65
 function orderController(){
 	return {
 		async index(req, res) {
-		const products = req.session.cart.items;
 			if(!req.session.cart) {
 				return res.redirect('/menu');
 			}
-			
+			let type = req.query.type;
 			const lineItems = [];
-			for(let productId of Object.values(req.session.cart.items)) {	
-				let totalAmount = 0;
-				if(productId.type === 'deals'){
-                    totalAmount = totalAmount + (productId.item.price * productId.qty);
-                    if(productId.item.deals.length >0){
-                        for(let items1 of Object.values(productId.item.deals)) {
-                            let extraTopping = JSON.parse(items1).extraTopping ? JSON.parse(items1).extraTopping : [];
+			if(type === 'delivery' || type ==='pay_now'){
+				for(let productId of Object.values(req.session.cart.items)) {	
+					let totalAmount = 0;
+					if(productId.type === 'deals'){
+						totalAmount = totalAmount + (productId.item.price * productId.qty);
+						if(productId.item.deals.length >0){
+							for(let items1 of Object.values(productId.item.deals)) {
+								let extraTopping = JSON.parse(items1).extraTopping ? JSON.parse(items1).extraTopping : [];
 
-                            if(extraTopping.length >0){
-                                for(let t of extraTopping) {
-                                    let test1 = t.split(',');
-                                    totalAmount +=parseFloat(test1[2]);
-                                }
-                            }						
-                        }
-                    }	
-                }
-                
-                if(productId.type === 'other'){
-                    console.log('test');
-                    if (productId.item.toppings.length > 0) {				
-                        let extraTopping = JSON.parse(productId.item.toppings);
-                        for(let t of extraTopping) {
-                            let test1 = t.split(',');
-                            totalAmount +=parseFloat(test1[2]);
-                        }
-                    }
-                    totalAmount = totalAmount + (productId.item.price * productId.qty);
-                }
-				//Retrieve price object from stripe API:
-				const price = parseFloat(productId.item.price)* 100;
-				const product =	productId.item.id;
-				const productName = productId.item.itemName;
-				const productImage = 'test2';
-				const productPrice = parseFloat(productId.item.price) + totalAmount* 100;
-				const productQuantity = productId.qty;
-				lineItems.push({
-					price_data: {
-						currency: 'usd',
-						product_data: {
-							name: productName,
-							images: [productImage],
+								if(extraTopping.length >0){
+									for(let t of extraTopping) {
+										let test1 = t.split(',');
+										totalAmount +=parseFloat(test1[2]);
+									}
+								}						
+							}
+						}	
+					}
+					
+					if(productId.type === 'other'){
+						console.log('test');
+						if (productId.item.toppings.length > 0) {				
+							let extraTopping = JSON.parse(productId.item.toppings);
+							for(let t of extraTopping) {
+								let test1 = t.split(',');
+								totalAmount +=parseFloat(test1[2]);
+							}
+						}
+						totalAmount = totalAmount + (productId.item.price * productId.qty);
+					}
+
+					console.log(totalAmount);
+					const price = parseFloat(productId.item.price)* 100;
+					const product =	productId.item.id;
+					const productName = productId.item.itemName;
+					const productImage = 'test2';
+					const productPrice = parseFloat(totalAmount)* 100;
+					const productQuantity = productId.qty;
+					lineItems.push({
+						price_data: {
+							currency: 'usd',
+							product_data: {
+								name: productName,
+								images: [productImage],
+							},
+							unit_amount: productPrice,
 						},
-						unit_amount: productPrice,
-					},
-					quantity: productQuantity,
+						quantity: productQuantity,
+					});
+				}
+				const session = await stripe.checkout.sessions.create({
+					payment_method_types: ['card'],
+					shipping_options: [
+						{
+						shipping_rate_data: {
+							type: 'fixed_amount',
+							fixed_amount: {
+							amount: req.session.cart.shippingCharge *100,
+							currency: 'usd',
+							},
+							display_name: 'Delivery Charges',
+						}
+						},
+					],
+					line_items: lineItems,
+					mode: 'payment',
+					success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
+					cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
 				});
+				res.render('shop/orders', {
+				path: '/checkout',
+				pageTitle: 'orders',
+				sessionId: session.id
+				});
+			}else{
+				return res.redirect('/menu');
 			}
-			const session = await stripe.checkout.sessions.create({
-				payment_method_types: ['card'],
-				shipping_options: [
-					{
-					  shipping_rate_data: {
-						type: 'fixed_amount',
-						fixed_amount: {
-						  amount: req.session.cart.shippingCharge *100,
-						  currency: 'usd',
-						},
-						display_name: 'Delivery Charges',
-					  }
-					},
-				  ],
-				line_items: lineItems,
-				mode: 'payment',
-				success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
-				cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
-			});
-			res.render('shop/orders', {
-			path: '/checkout',
-			pageTitle: 'orders',
-			sessionId: session.id
-			});
 		},
 		async store(req, res) {
 			let userEntity = {};
 			// Validate request
-			const {name, mobileNumber, email, address,city,postcode,ordertype,pickupType } = req.body;
+			const {name, mobileNumber, email, address,city,postcode,ordertype,pickupType,shippingCharge } = req.body;
 			let order_type = '';
+			let { cart } = req.session;
 			if(ordertype === 'pickup'){
 				order_type = 'PICKUP';
 			}else if(ordertype ==='delivery'){
 				order_type = 'DELIVERY';
+				cart.shippingCharge = parseFloat(shippingCharge);
 			}
 
 			if(!mobileNumber) {
@@ -175,7 +181,7 @@ function orderController(){
 					creationDate: firebase1.firestore.FieldValue.serverTimestamp(),
 					role: 'USER'
 				})
-				if(ordertype ==='pickup' && pickupType==='pay_at_counter' || ordertype ==='delivery')
+				if(ordertype ==='pickup' && pickupType==='pay_at_counter')
 				{
 					const lastOneRes = await firestore.collection('orders').orderBy('creationDate', 'desc').limit(1).get();
 					let ordrNo = '';
@@ -205,7 +211,7 @@ function orderController(){
 						customerAddress: address,
 						customerPhoneNumber: mobileNumber,
 						customerEmail: email,
-						deliveryAmount: req.session.cart.shippingCharge.toString(),
+						deliveryAmount: '',
 						deliveryTiming: deliveryTiming,
 						discountType: '',
 						discountValue: '',
@@ -298,7 +304,8 @@ function orderController(){
 					delete req.session.cart;
 					return res.redirect('/order/confirm');
 				}
-				return res.redirect('/customer/orders');
+				let type = (ordertype ==='pickup') ? 'pay_now' : ordertype;
+				return res.redirect('/customer/orders/?type='+type);
 			} catch (error) {
 				req.flash('error', 'Something went wrong!');
 				return res.redirect('/cart');

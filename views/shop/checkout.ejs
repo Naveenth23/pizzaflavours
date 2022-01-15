@@ -76,7 +76,7 @@
                         </div>
                     </div>
                    	<div class="different_address col-md-12" id="different_address">
-                        <h4><p>Please Pay by cash or bank transfer when the pizza is delivered to your location.</p></h4>
+                        <input type="hidden" name="shippingCharge" id="shippingCharge" value="" />
                         <div class="form-group">
                             <input type="text" class="form-control" name="address" id="address" placeholder="Street name & Number *">
                         </div>
@@ -155,7 +155,7 @@
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal" id="product-subtotal">$<span><%= (total+session.cart.shippingCharge).toFixed(2) %></span></td>
+                                    <td class="product-subtotal" id="product-subtotal">$<span><%= (total).toFixed(2) %></span></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -216,7 +216,7 @@
 <%- include('../includes/foot.ejs') %>
 <%- include('../includes/end.ejs') %>
 
-<script src="/js/scripts.js"></script>
+<script src="/js/scripts.js"></script>kk
 <script src="/js/jquery.simple-popup.min.js"></script>
 <script type="text/javascript">
     function handleData()
@@ -244,8 +244,10 @@
             $('#city').val(toTitleCase(area));
             $('#pincode').val(pincode);
             $('#delivery_charges > span').html(price);
+            $('#shippingCharge').val(price);
             $('#product-subtotal > span').html(total_price+parseFloat(price));
             $.post('update-total', { price:total_price+parseFloat(price),shipping: parseFloat(price)}, function(data){
+                $('#delivery_charges > span').val(data.shipping);
             });
             $('.close').trigger('click');
         } else {
@@ -301,6 +303,7 @@
         // });
         $.post('remove-delivery', { price:total_price}, function(data){
         });
+        $('#shippingCharge').val('');
         $('#address').prop('required', false);
         different_address.style.display = "none";
     }
