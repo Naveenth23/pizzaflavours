@@ -54,7 +54,7 @@ function orderController(){
 					const productQuantity = productId.qty;
 					lineItems.push({
 						price_data: {
-							currency: 'usd',
+							currency: 'aud',
 							product_data: {
 								name: productName,
 								images: [productImage],
@@ -72,7 +72,7 @@ function orderController(){
 							type: 'fixed_amount',
 							fixed_amount: {
 							amount: req.session.cart.shippingCharge *100,
-							currency: 'usd',
+							currency: 'aud',
 							},
 							display_name: 'Delivery Charges',
 						}
