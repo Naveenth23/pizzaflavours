@@ -4,7 +4,8 @@ const firestore = firebase.firestore();
 const admin = require('firebase-admin');
 const moment = require('moment');
 const firebase1 = require('firebase');
-const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65Pyo96Zk791WEeahF7HNG875upr6mZ7yCvCgiR3bxeGKqd01I8Jr00Idp4MbEJ');
+//const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65Pyo96Zk791WEeahF7HNG875upr6mZ7yCvCgiR3bxeGKqd01I8Jr00Idp4MbEJ');
+const stripe = require('stripe')('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');
 function orderController(){
 	return {
 		async index(req, res) {
