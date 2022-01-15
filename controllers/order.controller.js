@@ -205,7 +205,7 @@ function orderController(){
 						customerAddress: address,
 						customerPhoneNumber: mobileNumber,
 						customerEmail: email,
-						deliveryAmount: '',
+						deliveryAmount: req.session.cart.shippingCharge.toString(),
 						deliveryTiming: deliveryTiming,
 						discountType: '',
 						discountValue: '',
