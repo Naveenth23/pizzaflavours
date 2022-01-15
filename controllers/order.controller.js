@@ -176,6 +176,7 @@ function orderController(){
 					documentId: userDocRef.id,
 					creationByUid: userDocRef.id,
 					name: name,
+					email: email,
 					mobileNumber: mobileNumber,
 					address: address+','+city+','+postcode,
 					creationDate: firebase1.firestore.FieldValue.serverTimestamp(),

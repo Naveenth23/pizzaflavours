@@ -412,7 +412,8 @@ const getCheckoutSuccess = async(req, res, next) => {
 			var day = dateObj.getUTCDate();
 			var year = dateObj.getUTCFullYear();
 			
-			newdate = year+""+month+""+day;
+			var dt = new Date();
+            newdate = dt.getFullYear() + '' + (((dt.getMonth() + 1) < 10) ? '0' : '') + (dt.getMonth() + 1) + '' + ((dt.getDate() < 10) ? '0' : '') + dt.getDate();
             const orderNumber = "O-"+newdate+"-0"+increasedNum;
             
             let totalAmount = 0;
@@ -455,6 +456,7 @@ const getCheckoutSuccess = async(req, res, next) => {
             creationDate: firebase1.firestore.FieldValue.serverTimestamp(),
             customerAddress: data.data().address,
             customerName: data.data().name,
+            customerEmail: data.data().email,
             customerPhoneNumber: data.data().mobileNumber,
             deliveryAmount: req.session.cart.shippingCharge.toString(),
             deliveryTiming: deliveryTiming,
@@ -464,7 +466,7 @@ const getCheckoutSuccess = async(req, res, next) => {
             orderFrom: 'WEB',
             orderNumber: orderNumber,
             orderType: req.session.order.orderType,
-            paidType:'Stripe',
+            paidType:'STRIPE',
             netAmount: (totalAmount+req.session.cart.shippingCharge).toString(),
             price: totalAmount.toString(),
             status: 'PENDING',
