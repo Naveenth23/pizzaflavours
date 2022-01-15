@@ -463,7 +463,7 @@ const getCheckoutSuccess = async(req, res, next) => {
             documentId: orderDocRef.id,
             discountType: '',
             discountValue: '',
-            orderFrom: 'WEB',
+            orderForm: 'WEB',
             orderNumber: orderNumber,
             orderType: req.session.order.orderType,
             paidType:'STRIPE',
