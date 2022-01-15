@@ -4,7 +4,7 @@ function cartController() {
 			if(!req.session.cart) {
 				return res.redirect('/menu');
 			}
-			res.render('shop/cart',{ pageTitle: 'Shopping Cart Detail',path: '/cart',});
+			res.render('shop/cart',{ pageTitle: 'Byford Pizzeria Online Cart',path: '/cart',});
 		},
 		update(req, res) {
 			const { id, price } = req.body;
