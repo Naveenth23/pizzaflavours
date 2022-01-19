@@ -100,6 +100,7 @@ input[type=radio]:checked~label::before {
 	content: "";
 	color: #E50708;;
 	border-color: #E50708;
+	background-color:#E50708;
 }
 
 
