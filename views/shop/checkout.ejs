@@ -32,6 +32,8 @@
                     <div style="visibility:hidden; color:red; " id="chk_option_error">
                         Please select at least one order type.
                     </div>
+                    <div style="visibility:hidden; color:red; " id="delivery_error">
+                    </div>
                 </div>
                 <form class="billing-info-wrap row" onsubmit="return handleData()" action="/orders" method="post">	
                     <div class="form-group col-md-6">
@@ -54,16 +56,16 @@
                     <div class="form-group create-account col-md-12" id="create_account">
                         <div class="chek-form">
                             <div class="custome-radio">
-                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_at_counter" id="pay_at_counter" checked>
-                                <label class="form-radio-label label_info" for="pickupType"><span>Pay at counter</span></label>
+                                <input type="radio" name="pickupType" value="pay_at_counter" id="pay_at_counter" checked>
+                                <label for="pay_at_counter"><span>Pay at counter</span></label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group create-account col-md-12" id="create_account">
                         <div class="chek-form">
                             <div class="custome-radio">
-                                <input class="form-radio-input" type="radio" name="pickupType" value="pay_now" id="pay_now">
-                                <label class="form-radio-label label_info" for="pickupType"><span>Pay Now</span></label>
+                                <input type="radio" name="pickupType" value="pay_now" id="pay_now">
+                                <label for="pay_now"><span>Pay Now</span></label>
                             </div>
                         </div>
                     </div>
@@ -233,7 +235,10 @@
         return true;
         }        
     }
-
+    
+    setTimeout(function(){
+    document.getElementById('delivery_error').style.visibility = 'hidden'; 
+    }, 2000);
     function getdelivery(e, val) {
         if (!$(this).is(':checked')) {
             var matches = val.split('_');        
@@ -241,6 +246,29 @@
             var price = matches[1];
             var pincode = matches[2];
             var total_price = parseFloat($('#product-subtotal > span').html());
+            if(parseInt(price) == 5){
+                if(total_price<35){
+                    document.getElementById("delivery_error").style.visibility = "visible";
+                    $('#delivery_error').html("Minimum Order must be upto $35");
+                    $("#differentaddress").removeAttr("checked");
+                    $("#differentaddress").attr("checked", false);
+                    $('#different_address').css('display','none');
+                    $('.close').trigger('click');
+                    return false;
+                }
+            }else if(parseInt(price) == 10){
+                if(total_price<45){
+                    document.getElementById("delivery_error").style.visibility = "visible";
+                    $('#delivery_error').html("Minimum Order must be upto $45");
+                    $("#differentaddress").removeAttr("checked");
+                    $("#differentaddress").attr("checked", false);
+                    $('#different_address').css('display','none');
+                    $('.close').trigger('click');
+                    return false;
+                }
+            }
+
+            
             $('#city').val(toTitleCase(area));
             $('#pincode').val(pincode);
             $('#delivery_charges > span').html(price);
@@ -290,9 +318,7 @@
         different_address.style.display = "block";
     } else {
         $('#city').val('');
-        $('#pincode').val('');
-       
-        
+        $('#pincode').val('');        
         var price = parseFloat($('#delivery_charges > span').html());
         var total_price = parseFloat($('#product-subtotal > span').html());
         total_price = total_price - price;

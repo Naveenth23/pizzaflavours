@@ -6,6 +6,7 @@ const moment = require('moment');
 const firebase1 = require('firebase');
 //const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65Pyo96Zk791WEeahF7HNG875upr6mZ7yCvCgiR3bxeGKqd01I8Jr00Idp4MbEJ');
 const stripe = require('stripe')('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');
+
 function orderController(){
 	return {
 		async index(req, res) {
@@ -15,6 +16,16 @@ function orderController(){
 			let type = req.query.type;
 			const lineItems = [];
 			if(type === 'delivery' || type ==='pay_now'){
+				const snapshot = await firebase.firestore().collection('discount').get()
+				let documents;
+				snapshot.forEach(doc => {
+					documents = doc.data();
+					discount = documents.discountinpercentage;
+				});
+
+				console.log(discount);
+				let discountPrice = 0;
+				let discountType = '';
 				for(let productId of Object.values(req.session.cart.items)) {	
 					let totalAmount = 0;
 					if(productId.type === 'deals'){
@@ -45,7 +56,22 @@ function orderController(){
 						totalAmount = totalAmount + (productId.item.price * productId.qty);
 					}
 
-					console.log(totalAmount);
+					if(parseFloat(discount) > 0){
+						var today = new Date();						
+						if(today.getDay() == 2 || today.getDay() == 3){							
+							let weekday = ['Sunday',
+							'Monday',
+							'Tuesday',
+							'Wednesday',
+							'Thursday',
+							'Friday',
+							'Saturday'][new Date().getDay()];
+							discountPrice = totalAmount*parseFloat(discount)/100;
+							discountType = weekday;
+						}
+					}
+	
+					discountAmount = totalAmount-discountPrice;
 					const price = parseFloat(productId.item.price)* 100;
 					const product =	productId.item.id;
 					const productName = productId.item.itemName;
@@ -185,6 +211,33 @@ function orderController(){
 				})
 				if(ordertype ==='pickup' && pickupType==='pay_at_counter')
 				{
+					const snapshot = await firebase.firestore().collection('discount').get()
+					let documents;
+					snapshot.forEach(doc => {
+						documents = doc.data();
+						discount = documents.discountinpercentage;
+					});
+
+					console.log(discount);
+					let discountPrice = 0;
+					let discountType = '';
+					if(parseFloat(discount) > 0){
+						var today = new Date();						
+						if(today.getDay() == 2 || today.getDay() == 3){							
+							let weekday = ['Sunday',
+							'Monday',
+							'Tuesday',
+							'Wednesday',
+							'Thursday',
+							'Friday',
+							'Saturday'][new Date().getDay()];
+							discountPrice = totalAmount*parseFloat(discount)/100;
+							discountType = weekday;
+						}
+					}
+	
+					discountAmount = totalAmount-discountPrice;
+
 					const lastOneRes = await firestore.collection('orders').orderBy('creationDate', 'desc').limit(1).get();
 					let ordrNo = '';
 					lastOneRes.forEach(doc => {
@@ -215,11 +268,11 @@ function orderController(){
 						customerEmail: email,
 						deliveryAmount: '',
 						deliveryTiming: deliveryTiming,
-						discountType: '',
-						discountValue: '',
+						discountType: discountType.toString(),
+						discountValue: discountPrice.toString(),
 						documentId: orderDocRef.id,
 						netAmount: totalAmount.toString(),
-						price: totalAmount.toString(),
+						price: discountAmount.toString(),
 						orderForm: 'WEB',
 						orderNumber: orderNumber,
 						orderType: req.session.order.orderType,

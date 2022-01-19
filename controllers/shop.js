@@ -19,7 +19,7 @@ const firebase1 = require('firebase');
 const { check, validationResult } = require('express-validator');
 const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65Pyo96Zk791WEeahF7HNG875upr6mZ7yCvCgiR3bxeGKqd01I8Jr00Idp4MbEJ');
 
-const getIndex = async (req, res, next) => {
+const getIndex = async (req, res, next) => {    
     res.render('shop/index', {
         pageTitle: 'Byford Pizzeria Online',
         path: '/'
@@ -404,6 +404,15 @@ const getCheckoutSuccess = async(req, res, next) => {
             ordrNo = doc.data().orderNumber;
         });
 
+        const snapshot = await firebase.firestore().collection('discount').get()
+        let documents;
+        snapshot.forEach(doc => {
+            documents = doc.data();
+            discount = documents.discountinpercentage;
+        });
+
+        let discountPrice = 0;
+        let discountType = '';
         const pieces = ordrNo.split(/[\s-]+/)
 			const last = pieces[pieces.length - 1]
 			let increasedNum = Number(last) + 1;
@@ -435,7 +444,6 @@ const getCheckoutSuccess = async(req, res, next) => {
                 }
                 
                 if(productId.type === 'other'){
-                    console.log('test');
                     if (productId.item.toppings.length > 0) {				
                         let extraTopping = JSON.parse(productId.item.toppings);
                         for(let t of extraTopping) {
@@ -447,6 +455,22 @@ const getCheckoutSuccess = async(req, res, next) => {
                 }
             }
             totalAmount = totalAmount;
+            if(parseFloat(discount) > 0){
+                var today = new Date();                
+                if(today.getDay() == 2 || today.getDay() == 3){							
+                    let weekday = ['Sunday',
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday',
+                    'Saturday'][new Date().getDay()];
+                    discountPrice = totalAmount*parseFloat(discount)/100;
+                    discountType = weekday;
+                }
+            }
+    
+            discountAmount = totalAmount-discountPrice;
             var deliveryTiming = year+"-"+month+"-"+day+" "+dateObj.getUTCHours()+":"+dateObj.getUTCMinutes()+":"+dateObj.getUTCSeconds()+"."+Math.floor(100000 + Math.random() * 900000);
         orderDocRef.set({
             collected: 'No',            
@@ -461,14 +485,14 @@ const getCheckoutSuccess = async(req, res, next) => {
             deliveryAmount: req.session.cart.shippingCharge.toString(),
             deliveryTiming: deliveryTiming,
             documentId: orderDocRef.id,
-            discountType: '',
-            discountValue: '',
+            discountType: discountType.toString(),
+            discountValue: discountPrice.toString(),
             orderForm: 'WEB',
             orderNumber: orderNumber,
             orderType: req.session.order.orderType,
             paidType:'STRIPE',
             netAmount: (totalAmount+req.session.cart.shippingCharge).toString(),
-            price: totalAmount.toString(),
+            price: discountAmount.toString(),
             status: 'PENDING',
             tableNumber:''
         })

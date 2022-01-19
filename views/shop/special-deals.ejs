@@ -15,11 +15,10 @@
                     <tr>
                         <th width="80%">
                             <div class="checkPizza" id="checkPizza_<%= i %>">
-                                <input type="checkbox" class="pizzas" value="<%= JSON.stringify(pizza) %>" name="pizza" id="pizzas">
-                                <label for="pizzas"><span><%= pizza.itemName %></span></label>
+                                <input type="checkbox" class="pizzas" value="<%= JSON.stringify(pizza) %>" name="pizza" id="pizzas<%= pizza.id %><%= i %>">
+                                <label for="pizzas<%= pizza.id %><%= i %>"><span><%= pizza.itemName %></span></label>
                             </div>
-                            <div class="pizza-toppings hidden-list">
-                                
+                            <div class="pizza-toppings hidden-list">                                
                                 <div class="heading_s1">
                                     <h4>Ingredients</h4>
                                 </div>
@@ -27,14 +26,17 @@
                                     <div class="table-responsive order_table">
                                         <table class="ingredient-table">
                                             <thead>
-                                                <%  for(let t of pizza.ingredients) {
+                                                <%  
+                                                    count =1;
+                                                    for(let t of pizza.ingredients) {
+                                                    count++;
                                                     t.id = i+'_'+pizza.id
                                                     data1 = {
                                                         id: i+'_'+pizza.id,
                                                         ingredient: t+',NO'
                                                     };
                                                 %>
-                                                <th><input type="checkbox" id="ingredient" class="ingredients" name="ingredient1" value="<%= JSON.stringify(data1) %>" checked><label><span><%= t %></span></label></th>
+                                                <th><input type="checkbox" id="ingredient<%= t.id %><%= i %><%= pizza.id %><%= t.documentId %><%= count %>" class="ingredients" name="ingredient1" value="<%= JSON.stringify(data1) %>" checked><label for="ingredient<%= t.id %><%= i %><%= pizza.id %><%= t.documentId %><%= count %>"><span><%= t %></span></label></th>
                                                 <% } %>
                                             </thead>
                                         </table>
@@ -48,7 +50,7 @@
                                         <% for(let items of Object.values(topping.topping)) {
                                             items.id = i+'_'+pizza.id
                                         %>
-                                        <li><input type="checkbox" class="toppings" name="topping" id="topping" value="<%= JSON.stringify(items) %>"> <%= items.toppingName %> <span>$<%= items.price %></span></li>
+                                        <li><input type="checkbox" class="toppings" name="topping" id="toppings<%= items.documentId %><%= i %><%= items.id %>" value="<%= JSON.stringify(items) %>"><label for="toppings<%= items.documentId %><%= i %><%= items.id %>"><span><%= items.toppingName %></span></label> <span>$<%= items.price %></span></li>
                                         <% } %>
                                     </ul>
                                 <% } %>
@@ -79,8 +81,8 @@
                         <tr>
                             <th width="80%">
                                 <div class="checkPasta">
-                                    <input type="checkbox" class="pastas" value="<%= JSON.stringify(pasta) %>" name="pasta" id="pastas">
-                                    <label for="pastas"><span><%= pasta.itemName %></span></label>
+                                    <input type="checkbox" id="pastas<%= pasta.pid %>" class="pastas" value="<%= JSON.stringify(pasta) %>" name="pasta" id="pastas">
+                                    <label for="pastas<%= pasta.pid %>"><span><%= pasta.itemName %></span></label>
                                 </div>
                             </th>
                         </tr>
@@ -103,7 +105,7 @@
                     <tr>
                         <th width="80%">
                             <input type="checkbox" class="garlics" id="garlic_bread" value='{"id":"THtO4898SiTcJBNlDV2J","gid":"RRrEJWaj8hcguhqCPF1V","category":"SIDES","itemName":"GARLIC BREAD","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"7","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="drink" id="drinks" checked="checked" disabled>
-                            <label for="drinks"><span>GARLIC BREAD</span></label>
+                            <label for="garlic_bread"><span>GARLIC BREAD</span></label>
                         </th>
                     </tr>
                 </thead>
@@ -123,7 +125,7 @@
                     <tr>
                         <th width="80%">
                             <input type="checkbox" id="coke_drink" class="drinks" value='{"id":"RRrEJWaj8hcguhqCPF1V","did":"RRrEJWaj8hcguhqCPF1V","category":"DRINKS","itemName":"COKE (1.25L)","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"5","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="drink" id="drinks" checked="checked" disabled>
-                            <label for="drinks"><span>COKE (1.25L)</span></label>
+                            <label for="coke_drink"><span>COKE (1.25L)</span></label>
                         </th>
                     </tr>
                 </thead>
@@ -203,6 +205,7 @@
     } else {
         pizzaList.splice(pizzaList.findIndex(e => e.pid === pizza.id),1);
         $('.specialList').val(pizzaList);
+        console.log(pizzaList);
       limit--; //else, decrement counter
     }
     
@@ -243,10 +246,10 @@
       limit1++;
     } else {
         pizzaList.splice(pizzaList.findIndex(e => e.pid === pasta.id),1);
+        console.log(pizzaList);
       limit1--; //else, decrement counter
     }
 
-    console.log(pizzaList);
   
     for (i = 0; i < pastaChecks.length; i++) { // loop through all 
       if (limit1 == parseInt(pasta.pastacount)) {

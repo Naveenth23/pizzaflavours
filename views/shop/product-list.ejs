@@ -172,6 +172,12 @@
             <h4>Ingredients</h4>
         </div>
         <div id="ingredients">
+            <div class="tm-checkout-payment">
+                <div class="tm-form-inner">
+                    <div class="tm-form-field">                        
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive order_table">
                 <table class="ingredient-table">
                     <thead>
@@ -188,11 +194,12 @@
                 <div class="table-responsive order_table">
                     <table class="topping-table">
                         <thead>
-                            <% for(let items of Object.values(topping.topping)) {%>
+                            <% for(let items of Object.values(topping.topping)) {
+                            %>
                             <tr>
                                 <th width="80%">
-                                    <input type="checkbox" class="toppings" value="<%= items.toppingName %>,<%= topping.toppingCategoryName %>,<%= items.price %>,1,1" name="topping" id="toppings">
-                                    <label for="toppings"><span><%= items.toppingName %></span></label>
+                                    <input type="checkbox" value="<%= items.toppingName %>,<%= topping.toppingCategoryName %>,<%= items.price %>,1,1" name="topping" class="toppings" id="toppings<%= items.documentId %>">
+                                    <label for="toppings<%= items.documentId %>"><%= items.toppingName %></label>
                                 </th>
                                 <th width="20%">$<%= items.price %></th>
                             </tr>
@@ -306,9 +313,12 @@
         var garliccount = JSON.parse(pizza.garliccount);
         var drinkcount = JSON.parse(pizza.drinkcount);
         var pastacount = JSON.parse(pizza.pastacount);
+        
+        $('.tm-preloader').show();
         $.post('/getItems', {pizza:pizzacount,garlic:garliccount,drink:drinkcount,pasta:pastacount}, function(data){
             $('#addToCart-modal-body').html(data);
             $(this).simplePopup(options2);
+            $(".tm-preloader").fadeOut()
         });
     }
     $('body').delegate('a.special-deals','click',function(e){  
@@ -332,10 +342,10 @@
         $('.price').val(pizza.price);
         $('.itemName').val(pizza.itemName);
         $('.category').val(pizza.category);
-        $('.ingredient-table th').remove();
+        $('.tm-form-inner .tm-form-field').remove();
         jQuery.each(pizza.ingredients, function(i, val) {
-            $('.ingredient-table thead')
-            .append(`<th><input type="checkbox" id="ingredient" class="ingredient" name="ingredient1" value="${val}" checked><label><span>${val}</span></label></th>`)		  
+            $('.tm-form-inner')
+            .append(`<div class='tm-form-field'><input type="checkbox" id="ingredient${val}" class="ingredient" name="ingredient${val}" value="${val}" checked><label for="ingredient${val}"><span>${val}</span></label></div>`)		  
 		});
         $(this).simplePopup(options);
     });
