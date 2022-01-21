@@ -26593,6 +26593,44 @@
             }
         });
     });
+    getdelivery  =  function(e, val) {
+        if (!$(this).is(':checked')) {
+            var matches = val.split('_');        
+            var area = matches[0];
+            var price = matches[1];
+            var pincode = matches[2];
+            var total_price = parseFloat($('#product-subtotal > span').html());
+            if(parseInt(price) == 10){
+                if(total_price<45){
+                    new Noty({
+                        type: 'error',
+                        layout: 'topRight',
+                        timeout: 1000,
+                        theme: 'relax',
+                        text: 'Minimum Order must be upto $45',
+                        progressBar: false
+                      }).show();
+                    $("#differentaddress").removeAttr("checked");
+                    $("#differentaddress").attr("checked", false);
+                    $('#different_address').css('display','none');
+                    $('.close').trigger('click');
+                    return false;
+                }
+            }
+            
+            $('#city').val(toTitleCase(area));
+            $('#pincode').val(pincode);
+            $('#delivery_charges > span').html(price);
+            $('#shippingCharge').val(price);
+            $('#product-subtotal > span').html(total_price+parseFloat(price));
+            $.post('update-total', { price:total_price+parseFloat(price),shipping: parseFloat(price)}, function(data){
+                $('#delivery_charges > span').val(data.shipping);
+            });
+            $('.close').trigger('click');
+        } else {
+            $("#chkroot").removeAttr('checked');
+        }
+    };
 
     var updateCart = function updateCart(pizza) {
       axios.post('/update-cart', pizza).then(function (res) {

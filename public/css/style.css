@@ -95,6 +95,17 @@ input[type=radio]~label::before {
 	font-size: 28px
 }
 
+.tm-form-inner {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    grid-auto-rows: minmax(50px,50px);
+}
+
+.c-preloader {
+    color: #E50708;
+    font-size: 2rem;
+}
 
 input[type=radio]:checked~label::before {
 	content: "";

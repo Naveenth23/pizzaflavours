@@ -23,9 +23,9 @@ function orderController(){
 					discount = documents.discountinpercentage;
 				});
 
-				console.log(discount);
 				let discountPrice = 0;
 				let discountType = '';
+				let session = '';
 				for(let productId of Object.values(req.session.cart.items)) {	
 					let totalAmount = 0;
 					if(productId.type === 'deals'){
@@ -45,7 +45,6 @@ function orderController(){
 					}
 					
 					if(productId.type === 'other'){
-						console.log('test');
 						if (productId.item.toppings.length > 0) {				
 							let extraTopping = JSON.parse(productId.item.toppings);
 							for(let t of extraTopping) {
@@ -77,7 +76,7 @@ function orderController(){
 					const productName = productId.item.itemName;
 					const productImage = 'test2';
 					const productPrice = parseFloat(totalAmount)* 100;
-					const productQuantity = productId.qty;
+					const productQuantity = 1;
 					lineItems.push({
 						price_data: {
 							currency: 'aud',
@@ -90,25 +89,55 @@ function orderController(){
 						quantity: productQuantity,
 					});
 				}
-				const session = await stripe.checkout.sessions.create({
-					payment_method_types: ['card'],
-					shipping_options: [
-						{
-						shipping_rate_data: {
-							type: 'fixed_amount',
-							fixed_amount: {
-							amount: req.session.cart.shippingCharge *100,
-							currency: 'aud',
+				let coupon= [];
+				if(parseFloat(discountPrice) > 0){
+					coupon = await stripe.coupons.create({
+						percent_off: 10,
+						duration: 'repeating',
+						duration_in_months: 3,
+						name: discountType,
+					});
+				}
+				if(type === 'delivery'){
+					session = await stripe.checkout.sessions.create({
+						payment_method_types: ['card'],
+						'discounts': [
+							{
+							coupon: coupon.id,
+							}
+						],
+						shipping_options: [
+							{
+							shipping_rate_data: {
+								type: 'fixed_amount',
+								fixed_amount: {
+								amount: req.session.cart.shippingCharge *100,
+								currency: 'aud',
+								},
+								display_name: 'Delivery Charges',
+							}
 							},
-							display_name: 'Delivery Charges',
-						}
-						},
-					],
-					line_items: lineItems,
-					mode: 'payment',
-					success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
-					cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
-				});
+						],
+						line_items: lineItems,
+						mode: 'payment',
+						success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
+						cancel_url: req.protocol + '://' + req.get('host') + '/checkout'
+					});
+				}else if(type ==='pay_now'){
+					session = await stripe.checkout.sessions.create({
+						payment_method_types: ['card'],
+						'discounts': [
+							{
+							coupon: coupon.id,
+							}
+						],
+						line_items: lineItems,
+						mode: 'payment',
+						success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
+						cancel_url: req.protocol + '://' + req.get('host') + '/checkout'
+					});	
+				}
+
 				res.render('shop/orders', {
 				path: '/checkout',
 				pageTitle: 'orders',
@@ -152,7 +181,7 @@ function orderController(){
 			for (let productId in req.session.cart.items) {
 				count += req.session.cart.items[productId].qty;
 			}
-			let totalAmount = 0;
+				let totalAmount = 0;
 				for(let productId of Object.values(req.session.cart.items)) {
 					if(productId.type === 'deals'){
 						totalAmount = totalAmount + (productId.item.price * productId.qty);
@@ -171,7 +200,6 @@ function orderController(){
 					}
 					
 					if(productId.type === 'other'){
-						console.log('test');
 						if (productId.item.toppings.length > 0) {				
 							let extraTopping = JSON.parse(productId.item.toppings);
 							for(let t of extraTopping) {
@@ -218,7 +246,6 @@ function orderController(){
 						discount = documents.discountinpercentage;
 					});
 
-					console.log(discount);
 					let discountPrice = 0;
 					let discountType = '';
 					if(parseFloat(discount) > 0){
@@ -271,8 +298,8 @@ function orderController(){
 						discountType: discountType.toString(),
 						discountValue: discountPrice.toString(),
 						documentId: orderDocRef.id,
-						netAmount: totalAmount.toString(),
-						price: discountAmount.toString(),
+						netAmount: discountAmount.toString(),
+						price: totalAmount.toString(),
 						orderForm: 'WEB',
 						orderNumber: orderNumber,
 						orderType: req.session.order.orderType,

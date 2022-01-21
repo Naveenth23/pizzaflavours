@@ -376,7 +376,62 @@ const getCheckout = async(req, res, next) => {
         return res.redirect('/menu');
     }
     const { cart } = req.session;
-    res.render('shop/checkout', { delivery: delivery, pageTitle: 'Byford Pizzeria Online Checkout', path: '/cart', name: 'Edward' })
+    let totalAmount = 0;
+    for(let productId of Object.values(req.session.cart.items)) {
+        if(productId.type === 'deals'){
+            totalAmount = totalAmount + (productId.item.price * productId.qty);
+            if(productId.item.deals.length >0){
+                for(let items1 of Object.values(productId.item.deals)) {
+                    let extraTopping = JSON.parse(items1).extraTopping ? JSON.parse(items1).extraTopping : [];
+
+                    if(extraTopping.length >0){
+                        for(let t of extraTopping) {
+                            let test1 = t.split(',');
+                            totalAmount +=parseFloat(test1[2]);
+                        }
+                    }						
+                }
+            }	
+        }
+        
+        if(productId.type === 'other'){
+            console.log('test');
+            if (productId.item.toppings.length > 0) {				
+                let extraTopping = JSON.parse(productId.item.toppings);
+                for(let t of extraTopping) {
+                    let test1 = t.split(',');
+                    totalAmount +=parseFloat(test1[2]);
+                }
+            }
+            totalAmount = totalAmount + (productId.item.price * productId.qty);
+        }
+    }
+
+    const snapshot = await firebase.firestore().collection('discount').get()
+    let documents;
+    snapshot.forEach(doc => {
+        documents = doc.data();
+        discount = documents.discountinpercentage;
+    });
+
+    let discountPrice = 0;
+    let discountType = '';
+    if(parseFloat(discount) > 0){
+        var today = new Date();						
+        if(today.getDay() == 2 || today.getDay() == 3){							
+            let weekday = ['Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday'][new Date().getDay()];
+            discountPrice = totalAmount*parseFloat(discount)/100;
+            discountType = weekday;
+        }
+    }
+       
+    res.render('shop/checkout', { delivery: delivery, discountPrice:discountPrice,pageTitle: 'Byford Pizzeria Online Checkout', path: '/cart', name: 'Edward' })
 };
 
 const orderConfirm = async(req, res, next) => {
@@ -471,6 +526,13 @@ const getCheckoutSuccess = async(req, res, next) => {
             }
     
             discountAmount = totalAmount-discountPrice;
+            let deliveryAmount = 0;
+            let order_type = 'PICKUP';
+            if(req.session.order.orderType === 'DELIVERY'){
+                deliveryAmount = req.session.cart.shippingCharge;
+                order_type = 'DELIVERY';
+            }
+
             var deliveryTiming = year+"-"+month+"-"+day+" "+dateObj.getUTCHours()+":"+dateObj.getUTCMinutes()+":"+dateObj.getUTCSeconds()+"."+Math.floor(100000 + Math.random() * 900000);
         orderDocRef.set({
             collected: 'No',            
@@ -482,17 +544,17 @@ const getCheckoutSuccess = async(req, res, next) => {
             customerName: data.data().name,
             customerEmail: data.data().email,
             customerPhoneNumber: data.data().mobileNumber,
-            deliveryAmount: req.session.cart.shippingCharge.toString(),
+            deliveryAmount: deliveryAmount.toString(),
             deliveryTiming: deliveryTiming,
             documentId: orderDocRef.id,
             discountType: discountType.toString(),
             discountValue: discountPrice.toString(),
             orderForm: 'WEB',
             orderNumber: orderNumber,
-            orderType: req.session.order.orderType,
+            orderType: order_type,
             paidType:'STRIPE',
-            netAmount: (totalAmount+req.session.cart.shippingCharge).toString(),
-            price: discountAmount.toString(),
+            netAmount: (discountAmount+deliveryAmount).toString(),
+            price: totalAmount.toString(),
             status: 'PENDING',
             tableNumber:''
         })

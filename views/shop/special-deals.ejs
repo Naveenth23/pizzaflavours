@@ -23,23 +23,24 @@
                                     <h4>Ingredients</h4>
                                 </div>
                                 <div id="ingredients">
-                                    <div class="table-responsive order_table">
-                                        <table class="ingredient-table">
-                                            <thead>
-                                                <%  
-                                                    count =1;
-                                                    for(let t of pizza.ingredients) {
-                                                    count++;
-                                                    t.id = i+'_'+pizza.id
-                                                    data1 = {
-                                                        id: i+'_'+pizza.id,
-                                                        ingredient: t+',NO'
-                                                    };
-                                                %>
-                                                <th><input type="checkbox" id="ingredient<%= t.id %><%= i %><%= pizza.id %><%= t.documentId %><%= count %>" class="ingredients" name="ingredient1" value="<%= JSON.stringify(data1) %>" checked><label for="ingredient<%= t.id %><%= i %><%= pizza.id %><%= t.documentId %><%= count %>"><span><%= t %></span></label></th>
-                                                <% } %>
-                                            </thead>
-                                        </table>
+                                    <div class="tm-checkout-payment">
+                                        <div class="tm-form-inner">      
+                                            <%  
+                                                count =1;
+                                            for(let t of pizza.ingredients) {
+                                                count++;
+                                                t.id = i+'_'+pizza.id
+                                                data1 = {
+                                                    id: i+'_'+pizza.id,
+                                                    ingredient: t+',NO'
+                                                };
+                                            %>                                      
+                                            <div class="tm-form-field">
+                                                <input type="checkbox" id="ingredient<%= t.id %><%= i %><%= pizza.id %><%= t.documentId %><%= count %>" class="ingredients" name="ingredient1" value="<%= JSON.stringify(data1) %>" checked>
+                                                <label for="ingredient<%= t.id %><%= i %><%= pizza.id %><%= t.documentId %><%= count %>"><span><%= t %></span></label>
+                                            </div>
+                                            <% } %>
+                                        </div>
                                     </div>
                                 </div>
                                 <% for (let topping of toppings) { %>   
@@ -133,7 +134,13 @@
         </div>
     </div>
 <% } %>
-
+<div class="form-group col-md-12">
+    <div class="form-group col-md-12">
+        <button type="button" class="btn btn-default specialdeals" id="specialdeals">
+            Add To Cart
+        </button>
+    </div>
+</div>
 <script type="text/javascript">
     $(document).ready(function () {
     let pizzaList = [];
@@ -156,8 +163,6 @@
                 }        
             }
         }
-
-        // console.log(pizzaList);
     });
 
     $('body').delegate('.toppings','change',function(e){         
@@ -200,11 +205,11 @@
     if (elem.checked) { //if checked, increment counter
         pizzaList.push(pizza);
         $('.specialList').val(JSON.stringify(pizzaList));
-        console.log(pizzaList);
       limit++;
     } else {
         pizzaList.splice(pizzaList.findIndex(e => e.pid === pizza.id),1);
-        $('.specialList').val(pizzaList);
+        
+        $('.specialList').val(JSON.stringify(pizzaList));
         console.log(pizzaList);
       limit--; //else, decrement counter
     }
@@ -215,7 +220,6 @@
         let checks = pizzaChecks[i].closest(".topping-table").querySelectorAll("input.pizzas");
         // console.log(checks.length);
         let count = pizzaChecks[i].closest(".topping-table").querySelectorAll("input.pizzas:checked").length;
-        //console.log(count)
         for (j = 0; j < checks.length; j++) {    
             if(!checks[j].checked){
                 checks[j].disabled = true;

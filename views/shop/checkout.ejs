@@ -151,13 +151,19 @@
                                 <% } %>
                             </tbody>
                             <tfoot>
+                                <% if(discountPrice >0){  %>
+                                <tr>
+                                    <th>Discount</th>
+                                    <td id="discount">$<span><%= discountPrice %></span></td>
+                                </tr>
+                                <% } %>
                                 <tr>
                                     <th>Delivery</th>
                                     <td id="delivery_charges">$<span>0</span></td>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal" id="product-subtotal">$<span><%= (total).toFixed(2) %></span></td>
+                                    <td class="product-subtotal" id="product-subtotal">$<span><%= (total-discountPrice).toFixed(2) %></span></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -218,7 +224,7 @@
 <%- include('../includes/foot.ejs') %>
 <%- include('../includes/end.ejs') %>
 
-<script src="/js/scripts.js"></script>kk
+<script src="/js/scripts.js"></script>
 <script src="/js/jquery.simple-popup.min.js"></script>
 <script type="text/javascript">
     function handleData()
@@ -239,49 +245,6 @@
     setTimeout(function(){
     document.getElementById('delivery_error').style.visibility = 'hidden'; 
     }, 2000);
-    function getdelivery(e, val) {
-        if (!$(this).is(':checked')) {
-            var matches = val.split('_');        
-            var area = matches[0];
-            var price = matches[1];
-            var pincode = matches[2];
-            var total_price = parseFloat($('#product-subtotal > span').html());
-            if(parseInt(price) == 5){
-                if(total_price<35){
-                    document.getElementById("delivery_error").style.visibility = "visible";
-                    $('#delivery_error').html("Minimum Order must be upto $35");
-                    $("#differentaddress").removeAttr("checked");
-                    $("#differentaddress").attr("checked", false);
-                    $('#different_address').css('display','none');
-                    $('.close').trigger('click');
-                    return false;
-                }
-            }else if(parseInt(price) == 10){
-                if(total_price<45){
-                    document.getElementById("delivery_error").style.visibility = "visible";
-                    $('#delivery_error').html("Minimum Order must be upto $45");
-                    $("#differentaddress").removeAttr("checked");
-                    $("#differentaddress").attr("checked", false);
-                    $('#different_address').css('display','none');
-                    $('.close').trigger('click');
-                    return false;
-                }
-            }
-
-            
-            $('#city').val(toTitleCase(area));
-            $('#pincode').val(pincode);
-            $('#delivery_charges > span').html(price);
-            $('#shippingCharge').val(price);
-            $('#product-subtotal > span').html(total_price+parseFloat(price));
-            $.post('update-total', { price:total_price+parseFloat(price),shipping: parseFloat(price)}, function(data){
-                $('#delivery_charges > span').val(data.shipping);
-            });
-            $('.close').trigger('click');
-        } else {
-            $("#chkroot").removeAttr('checked');
-        }
-    }
 
     function toTitleCase(str) {
         return str.replace(
@@ -323,7 +286,7 @@
         var total_price = parseFloat($('#product-subtotal > span').html());
         total_price = total_price - price;
         $('#delivery_charges > span').html('0');
-        $('#product-subtotal > span').html(total_price);
+        $('#product-subtotal > span').html(total_price.toFixed(2));
         //  $.post('remove-delivery', function(data){
            
         // });
