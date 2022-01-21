@@ -66,7 +66,7 @@ function orderController(){
 							'Friday',
 							'Saturday'][new Date().getDay()];
 							discountPrice = totalAmount*parseFloat(discount)/100;
-							discountType = weekday;
+							discountType = weekday+'%';
 						}
 					}
 	
@@ -259,7 +259,7 @@ function orderController(){
 							'Friday',
 							'Saturday'][new Date().getDay()];
 							discountPrice = totalAmount*parseFloat(discount)/100;
-							discountType = weekday;
+							discountType = weekday+'%';
 						}
 					}
 	

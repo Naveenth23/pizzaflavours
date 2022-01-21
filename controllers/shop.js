@@ -427,7 +427,7 @@ const getCheckout = async(req, res, next) => {
             'Friday',
             'Saturday'][new Date().getDay()];
             discountPrice = totalAmount*parseFloat(discount)/100;
-            discountType = weekday;
+            discountType = weekday+'%';
         }
     }
        
@@ -521,7 +521,7 @@ const getCheckoutSuccess = async(req, res, next) => {
                     'Friday',
                     'Saturday'][new Date().getDay()];
                     discountPrice = totalAmount*parseFloat(discount)/100;
-                    discountType = weekday;
+                    discountType = weekday+'%';
                 }
             }
     
