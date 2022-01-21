@@ -57,7 +57,7 @@ function orderController(){
 
 					if(parseFloat(discount) > 0){
 						var today = new Date();						
-						if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() ==6){							
+						if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() ==6 || today.getDay() == 5){							
 							let weekday = ['Sunday',
 							'Monday',
 							'Tuesday',
@@ -250,7 +250,7 @@ function orderController(){
 					let discountType = '';
 					if(parseFloat(discount) > 0){
 						var today = new Date();						
-						if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() ==6){							
+						if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() ==6 || today.getDay() == 5){							
 							let weekday = ['Sunday',
 							'Monday',
 							'Tuesday',

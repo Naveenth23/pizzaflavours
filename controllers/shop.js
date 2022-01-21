@@ -418,7 +418,7 @@ const getCheckout = async(req, res, next) => {
     let discountType = '';
     if(parseFloat(discount) > 0){
         var today = new Date();						
-        if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() == 6){							
+        if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() == 6 || today.getDay() == 5){							
             let weekday = ['Sunday',
             'Monday',
             'Tuesday',
@@ -512,7 +512,7 @@ const getCheckoutSuccess = async(req, res, next) => {
             totalAmount = totalAmount;
             if(parseFloat(discount) > 0){
                 var today = new Date();                
-                if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() == 6){							
+                if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() == 6 || today.getDay() == 5){							
                     let weekday = ['Sunday',
                     'Monday',
                     'Tuesday',
