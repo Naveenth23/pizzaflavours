@@ -4,8 +4,8 @@ const firestore = firebase.firestore();
 const admin = require('firebase-admin');
 const moment = require('moment');
 const firebase1 = require('firebase');
-const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65Pyo96Zk791WEeahF7HNG875upr6mZ7yCvCgiR3bxeGKqd01I8Jr00Idp4MbEJ');
-//const stripe = require('stripe')('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');
+//const stripe = require('stripe')('sk_test_51IPNeKFk1sSnNf4DkRZGbskzdeEvFihcGoP65Pyo96Zk791WEeahF7HNG875upr6mZ7yCvCgiR3bxeGKqd01I8Jr00Idp4MbEJ');
+const stripe = require('stripe')('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');
 
 function orderController(){
 	return {
@@ -57,7 +57,7 @@ function orderController(){
 
 					if(parseFloat(discount) > 0){
 						var today = new Date();						
-						if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() ==6 || today.getDay() == 5){							
+						if(today.getDay() == 2 || today.getDay() == 3){							
 							let weekday = ['Sunday',
 							'Monday',
 							'Tuesday',
@@ -250,7 +250,7 @@ function orderController(){
 					let discountType = '';
 					if(parseFloat(discount) > 0){
 						var today = new Date();						
-						if(today.getDay() == 2 || today.getDay() == 3 || today.getDay() ==6 || today.getDay() == 5){							
+						if(today.getDay() == 2 || today.getDay() == 3){							
 							let weekday = ['Sunday',
 							'Monday',
 							'Tuesday',
