@@ -3,8 +3,8 @@
             <button style="display:none;" id="order-btn" class="btn">ORDER</button>
             <script src="https://js.stripe.com/v3/"></script>
             <script>
-                //var stripe = Stripe('pk_test_51IPNeKFk1sSnNf4DrnN8LUdHNvCGKGyUDNoKz1UsrSEeoDKPOIVBvaQdXYVscXZdiMbKjkvawgRGmfZqpBv9G9dm003T8OkHTc');
-                var stripe = Stripe('pk_live_51J7xnbBgZERG1O8IKJ36M8UeXVFAWos4mMwQQSyokfEMdojs0qth8wWEEHwJHT0CzVJGHzIhOJwT7skyj1jSHiad00CcFEH50l');
+                var stripe = Stripe('pk_test_51IPNeKFk1sSnNf4DrnN8LUdHNvCGKGyUDNoKz1UsrSEeoDKPOIVBvaQdXYVscXZdiMbKjkvawgRGmfZqpBv9G9dm003T8OkHTc');
+                //var stripe = Stripe('pk_live_51J7xnbBgZERG1O8IKJ36M8UeXVFAWos4mMwQQSyokfEMdojs0qth8wWEEHwJHT0CzVJGHzIhOJwT7skyj1jSHiad00CcFEH50l');
                 var orderBtn = document.getElementById('order-btn');
                 orderBtn.addEventListener('click', function() {
                     stripe.redirectToCheckout({
