@@ -78,7 +78,7 @@
                         </div>
                     </div>
                    	<div class="different_address col-md-12" id="different_address">
-                        <input type="hidden" name="shippingCharge" id="shippingCharge" value="" />
+                        <input type="hidden" name="shippingCharge" id="shippingCharge"/>
                         <div class="form-group">
                             <input type="text" class="form-control" name="address" id="address" placeholder="Street name & Number *">
                         </div>
@@ -116,10 +116,13 @@
                                 <tr>
                                     <td><%= pizza.item.itemName %> <span class="product-qty">x <%= pizza.qty %></span></td>
                                     <td>$<%= pizza.item.price * pizza.qty %></td>
-                                </tr>
+                                </tr>                                
                                 <tr>
                                     <% if(pizza.item.hasOwnProperty('deals')){ %>
-                                    <% for(let items1 of Object.values(pizza.item.deals)) { %>
+                                    <% for(let items1 of Object.values(pizza.item.deals)) {  %>                                             
+                                                <tr>
+                                                    <td><span class="product-qty"><%= JSON.parse(items1).itemName %></span></td>
+                                                </tr>
                                             <% if(JSON.parse(items1).extraTopping != undefined) { %>
                                                 <% if(JSON.parse(items1).extraTopping.length > 0) { %>
                                                     <% var myarr = JSON.parse(items1).extraTopping; %>

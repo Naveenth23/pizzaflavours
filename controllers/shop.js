@@ -301,7 +301,6 @@ const specialDeals = async (req, res, next) => {
         let deals = JSON.parse(specialdeals.specialDeals);
         // let coke = JSON.parse(specialdeals.coke);
         let garlic = JSON.parse(specialdeals.garlic);
-        let drink = JSON.parse(specialdeals.drink);
         let t1 = JSON.parse(deals); 
         let price = parseFloat(specialdeals.price);
         let id = specialdeals.id;
@@ -318,7 +317,6 @@ const specialDeals = async (req, res, next) => {
         });
         
         test32.push(garlic);
-        test32.push(drink);
         var mydeal = {'id':specialdeals.id,'itemName':specialdeals.itemName, 'price':price,'deals':test32};
         if(!cart.items[id]) {
             cart.items[id] = {
@@ -416,20 +414,20 @@ const getCheckout = async(req, res, next) => {
 
     let discountPrice = 0;
     let discountType = '';
-    if(parseFloat(discount) > 0){
-        var today = new Date();						
-        if(today.getDay() == 2 || today.getDay() == 3){							
-            let weekday = ['Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday'][new Date().getDay()];
-            discountPrice = totalAmount*parseFloat(discount)/100;
-            discountType = weekday+'%';
-        }
-    }
+    // if(parseFloat(discount) > 0){
+    //     var today = new Date();						
+    //     if(today.getDay() == 2 || today.getDay() == 3){							
+    //         let weekday = ['Sunday',
+    //         'Monday',
+    //         'Tuesday',
+    //         'Wednesday',
+    //         'Thursday',
+    //         'Friday',
+    //         'Saturday'][new Date().getDay()];
+    //         discountPrice = totalAmount*parseFloat(discount)/100;
+    //         discountType = weekday+'%';
+    //     }
+    // }
        
     res.render('shop/checkout', { delivery: delivery, discountPrice:discountPrice,pageTitle: 'Byford Pizzeria Online Checkout', path: '/cart', name: 'Edward' })
 };
@@ -510,20 +508,20 @@ const getCheckoutSuccess = async(req, res, next) => {
                 }
             }
             totalAmount = totalAmount;
-            if(parseFloat(discount) > 0){
-                var today = new Date();                
-                if(today.getDay() == 2 || today.getDay() == 3){							
-                    let weekday = ['Sunday',
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday'][new Date().getDay()];
-                    discountPrice = totalAmount*parseFloat(discount)/100;
-                    discountType = weekday+'%';
-                }
-            }
+            // if(parseFloat(discount) > 0){
+            //     var today = new Date();                
+            //     if(today.getDay() == 2 || today.getDay() == 3){							
+            //         let weekday = ['Sunday',
+            //         'Monday',
+            //         'Tuesday',
+            //         'Wednesday',
+            //         'Thursday',
+            //         'Friday',
+            //         'Saturday'][new Date().getDay()];
+            //         discountPrice = totalAmount*parseFloat(discount)/100;
+            //         discountType = weekday+'%';
+            //     }
+            // }
     
             discountAmount = totalAmount-discountPrice;
             let deliveryAmount = 0;

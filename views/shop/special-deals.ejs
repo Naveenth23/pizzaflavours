@@ -105,7 +105,7 @@
                 <thead>
                     <tr>
                         <th width="80%">
-                            <input type="checkbox" class="garlics" id="garlic_bread" value='{"id":"THtO4898SiTcJBNlDV2J","gid":"RRrEJWaj8hcguhqCPF1V","category":"SIDES","itemName":"GARLIC BREAD","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"7","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="drink" id="drinks" checked="checked" disabled>
+                            <input type="checkbox" class="garlics" id="garlic_bread" value='{"id":"THtO4898SiTcJBNlDV2J","gid":"RRrEJWaj8hcguhqCPF1V","category":"SIDES","itemName":"GARLIC BREAD","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"7","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="garlic" id="drinks" checked="checked" disabled>
                             <label for="garlic_bread"><span>GARLIC BREAD</span></label>
                         </th>
                     </tr>
@@ -123,12 +123,21 @@
         <div class="table-responsive order_table">
             <table class="topping-table">
                 <thead>
+                    <% let i = 0; 
+                        for (let drink of drinkItems) { 
+                            i++;
+                        if(drink.itemName.includes('1.25L')){
+                    %>
                     <tr>
                         <th width="80%">
-                            <input type="checkbox" id="coke_drink" class="drinks" value='{"id":"RRrEJWaj8hcguhqCPF1V","did":"RRrEJWaj8hcguhqCPF1V","category":"DRINKS","itemName":"COKE (1.25L)","ingredients":[],"toppings":[],"images":null,"description":"","isAvailable":"YES","price":"5","toppingLimits":"0","pizzacount":"1","newingredients":[]}' name="drink" id="drinks" checked="checked" disabled>
-                            <label for="coke_drink"><span>COKE (1.25L)</span></label>
+                            <div class="checkDrink">
+                                <input type="checkbox" id="drinks<%= drink.id %>" class="drinks" value="<%= JSON.stringify(drink) %>" class="drink" name="drink" id="drinks">
+                                <label for="drinks<%= drink.id %>"><span><%= drink.itemName %></span></label>
+                            </div>
                         </th>
                     </tr>
+                    <% } %>
+                    <% } %>
                 </thead>
             </table>
         </div>
@@ -195,8 +204,9 @@
     limit1 =0;
   pizzaChecks = document.querySelectorAll('.checkPizza input[type="checkbox"]'); //select all checkboxes
   pastaChecks = document.querySelectorAll('.checkPasta input[type="checkbox"]'); //select all checkboxes
+  drinkChecks = document.querySelectorAll('.checkDrink input[type="checkbox"]'); //select all checkboxes
   garlicBreads = document.querySelector('#garlic_bread'); //select all checkboxes
-  cokeDrink = document.querySelector('#coke_drink'); //select all checkboxes
+//   cokeDrink = document.querySelector('#coke_drink'); //select all checkboxes
   
   function pizzaChecker(elem) {
     //   console.log(elem.parentNode)
@@ -240,7 +250,7 @@
     //   }
     }
   }
-  
+
   function pastaChecker(elem) {
     pasta = JSON.parse(elem.value);
     pasta.pastacount;
@@ -277,6 +287,51 @@
     pastaChecks[i].onclick = function() { //call function on click and send current element as param
         pastaChecker(this);
     }
+  }
+
+  function drinkChecker(elem) {
+    drink = JSON.parse(elem.value);
+    if (elem.checked) {
+      //if checked, increment counter
+      pizzaList.push(drink);
+      $(".specialList").val(JSON.stringify(pizzaList));
+      limit1++;
+    } else {
+      pizzaList.splice(
+        pizzaList.findIndex((e) => e.pid === drink.id),
+        1
+      );
+      limit1--; //else, decrement counter
+    }
+
+    console.log(pizzaList);
+
+    for (i = 0; i < drinkChecks.length; i++) {
+      // loop through all
+      if (limit1 == 1) {
+        if (!drinkChecks[i].checked) {
+          drinkChecks[i].disabled = true; // and disable unchecked drinkChecks
+        }
+      } else {
+        //if limit is less than two
+        if (!drinkChecks[i].checked) {
+          drinkChecks[i].disabled = false; // enable unchecked drinkChecks
+        }
+      }
+    }
+  }
+  for (i = 0; i < drinkChecks.length; i++) {
+    drinkChecks[i].onclick = function () {
+      //call function on click and send current element as param
+      drinkChecker(this);
+    };
+  }
+
+  for (i = 0; i < drinkChecks.length; i++) {
+    drinkChecks[i].onclick = function () {
+      //call function on click and send current element as param
+      drinkChecker(this);
+    };
   }
     });
   </script>

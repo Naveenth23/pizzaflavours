@@ -55,20 +55,20 @@ function orderController(){
 						totalAmount = totalAmount + (productId.item.price * productId.qty);
 					}
 
-					if(parseFloat(discount) > 0){
-						var today = new Date();						
-						if(today.getDay() == 2 || today.getDay() == 3){							
-							let weekday = ['Sunday',
-							'Monday',
-							'Tuesday',
-							'Wednesday',
-							'Thursday',
-							'Friday',
-							'Saturday'][new Date().getDay()];
-							discountPrice = totalAmount*parseFloat(discount)/100;
-							discountType = weekday+'%';
-						}
-					}
+					// if(parseFloat(discount) > 0){
+					// 	var today = new Date();						
+					// 	if(today.getDay() == 2 || today.getDay() == 3){							
+					// 		let weekday = ['Sunday',
+					// 		'Monday',
+					// 		'Tuesday',
+					// 		'Wednesday',
+					// 		'Thursday',
+					// 		'Friday',
+					// 		'Saturday'][new Date().getDay()];
+					// 		discountPrice = totalAmount*parseFloat(discount)/100;
+					// 		discountType = weekday+'%';
+					// 	}
+					// }
 	
 					discountAmount = totalAmount-discountPrice;
 					const price = parseFloat(productId.item.price)* 100;
@@ -89,23 +89,23 @@ function orderController(){
 						quantity: productQuantity,
 					});
 				}
-				let coupon= [];
-				if(parseFloat(discountPrice) > 0){
-					coupon = await stripe.coupons.create({
-						percent_off: 10,
-						duration: 'repeating',
-						duration_in_months: 3,
-						name: discountType,
-					});
-				}
+				// let coupon= [];
+				// if(parseFloat(discountPrice) > 0){
+				// 	coupon = await stripe.coupons.create({
+				// 		percent_off: 10,
+				// 		duration: 'repeating',
+				// 		duration_in_months: 3,
+				// 		name: discountType,
+				// 	});
+				// }
 				if(type === 'delivery'){
 					session = await stripe.checkout.sessions.create({
-						payment_method_types: ['card'],
-						'discounts': [
-							{
-							coupon: coupon.id,
-							}
-						],
+						// payment_method_types: ['card'],
+						// 'discounts': [
+						// 	{
+						// 	coupon: coupon.id,
+						// 	}
+						// ],
 						shipping_options: [
 							{
 							shipping_rate_data: {
@@ -248,20 +248,20 @@ function orderController(){
 
 					let discountPrice = 0;
 					let discountType = '';
-					if(parseFloat(discount) > 0){
-						var today = new Date();						
-						if(today.getDay() == 2 || today.getDay() == 3){							
-							let weekday = ['Sunday',
-							'Monday',
-							'Tuesday',
-							'Wednesday',
-							'Thursday',
-							'Friday',
-							'Saturday'][new Date().getDay()];
-							discountPrice = totalAmount*parseFloat(discount)/100;
-							discountType = weekday+'%';
-						}
-					}
+					// if(parseFloat(discount) > 0){
+					// 	var today = new Date();						
+					// 	if(today.getDay() == 2 || today.getDay() == 3){							
+					// 		let weekday = ['Sunday',
+					// 		'Monday',
+					// 		'Tuesday',
+					// 		'Wednesday',
+					// 		'Thursday',
+					// 		'Friday',
+					// 		'Saturday'][new Date().getDay()];
+					// 		discountPrice = totalAmount*parseFloat(discount)/100;
+					// 		discountType = weekday+'%';
+					// 	}
+					// }
 	
 					discountAmount = totalAmount-discountPrice;
 

@@ -26571,14 +26571,12 @@
         let price=$('#price').val();
         let itemName=$('#itemName').val()
         let garlic = document.querySelector('#garlic_bread');
-        let drink = document.querySelector('#coke_drink');
         garlic = JSON.stringify(garlic.value);
-        drink = JSON.stringify(drink.value);
         $.ajax({
             type:"POST",
             url: 'special-deals',
             dataType: 'json',
-            data: {"id":id,"itemName":itemName,"garlic":garlic,"drink":drink,"specialDeals":specialDeals,"price":price},
+            data: {"id":id,"itemName":itemName,"garlic":garlic,"specialDeals":specialDeals,"price":price},
             success: function(data){
                 new Noty({
                 type: 'success',
@@ -26593,6 +26591,14 @@
             }
         });
     });
+
+    onlyOne = function(checkbox) {
+        var checkboxes = document.getElementsByName('drink')
+        checkboxes.forEach((item) => {
+            if (item !== checkbox) item.checked = false
+        })
+    }
+
     getdelivery  =  function(e, val) {
         if (!$(this).is(':checked')) {
             var matches = val.split('_');        

@@ -97,9 +97,8 @@ input[type=radio]~label::before {
 
 .tm-form-inner {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(2,1fr);
     gap: 10px;
-    grid-auto-rows: minmax(50px,50px);
 }
 
 .c-preloader {
@@ -7431,6 +7430,7 @@ blockquote p {
 	-webkit-box-pack: center;
 	-ms-flex-pack: center;
 	justify-content: center;
+	width:100%;
 }
 .inner_complated {
 	text-align: center;
