@@ -26570,26 +26570,44 @@
         specialDeals = JSON.stringify(specialDeals);
         let price=$('#price').val();
         let itemName=$('#itemName').val()
+        let deals=$('#deals').val()
+        let pizzaCount=$('#pizzaCount').val()
         let garlic = document.querySelector('#garlic_bread');
-        garlic = JSON.stringify(garlic.value);
-        $.ajax({
-            type:"POST",
-            url: 'special-deals',
-            dataType: 'json',
-            data: {"id":id,"itemName":itemName,"garlic":garlic,"specialDeals":specialDeals,"price":price},
-            success: function(data){
-                new Noty({
-                type: 'success',
+        let count = parseInt(deals)-parseInt(pizzaCount);
+        if(deals == pizzaCount){
+            if(garlic){
+                garlic = JSON.stringify(garlic.value);
+            }else{
+                garlic = '';
+            }
+            $.ajax({
+                type:"POST",
+                url: 'special-deals',
+                dataType: 'json',
+                data: {"id":id,"itemName":itemName,"garlic":garlic,"specialDeals":specialDeals,"price":price},
+                success: function(data){
+                    new Noty({
+                    type: 'success',
+                    layout: 'topRight',
+                    timeout: 1000,
+                    theme: 'relax',
+                    text: 'Item added to cart',
+                    progressBar: false
+                    }).show();
+                    $('.close').trigger('click');
+                    cartCounter.innerText = data.totalQty;
+                }
+            });
+        }else{
+            new Noty({
+                type: 'error',
                 layout: 'topRight',
                 timeout: 1000,
                 theme: 'relax',
-                text: 'Item added to cart',
+                text: 'You choose '+pizzaCount+' Pizza. Please Choose '+count+' more Pizza',
                 progressBar: false
-                }).show();
-                $('.close').trigger('click');
-                cartCounter.innerText = data.totalQty;
-            }
-        });
+              }).show();
+        }
     });
 
     onlyOne = function(checkbox) {
