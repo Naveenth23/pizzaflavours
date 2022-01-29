@@ -175,7 +175,13 @@
     });
 
     $('body').delegate('.toppings','change',function(e){         
-        topping = JSON.parse($(this).val());    
+        topping = JSON.parse($(this).val());
+        // item = $('.itemName').val();
+        // // var halfDeal = item.includes("half & half"); 
+        // // if(halfDeal){
+        // //     topping.price = topping.price/2;
+        // // }
+
         if ($(this).is(":checked")){        
             for (var i = 0; i < pizzaList.length; i++){
                 var obj = pizzaList[i]
@@ -195,9 +201,8 @@
                     }
                 }        
             }
+            $('.specialList').val(JSON.stringify(pizzaList));
         }
-
-        // console.log(pizzaList);
     });
 
     limit = 0; //set limit
@@ -212,16 +217,19 @@
     //   console.log(elem.parentNode)
     pizza = JSON.parse(elem.value);
     pizza.pizzacount;
+    $('#deals').val(pizza.pizzacount);
     if (elem.checked) { //if checked, increment counter
         pizzaList.push(pizza);
         $('.specialList').val(JSON.stringify(pizzaList));
-      limit++;
+      limit++;      
+      $('#pizzaCount').val(limit);
     } else {
         pizzaList.splice(pizzaList.findIndex(e => e.pid === pizza.id),1);
         
         $('.specialList').val(JSON.stringify(pizzaList));
         console.log(pizzaList);
       limit--; //else, decrement counter
+      $('#pizzaCount').val(limit);
     }
     
     let count = 0;

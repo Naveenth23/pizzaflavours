@@ -26604,7 +26604,7 @@
                 layout: 'topRight',
                 timeout: 1000,
                 theme: 'relax',
-                text: 'You choose '+pizzaCount+' Pizza. Please Choose '+count+' more Pizza',
+                text: 'Add '+count+' more Pizza',
                 progressBar: false
               }).show();
         }
