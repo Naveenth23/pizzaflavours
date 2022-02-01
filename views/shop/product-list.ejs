@@ -235,6 +235,10 @@
         <input type="hidden" name="price" id="price" class="price" value="" />
         <input type="hidden" name="itemName" id="itemName" class="itemName" value="" />
         <input type="hidden" name="deals" id="deals" class="deals" value="" />
+        <input type="hidden" name="drinks" id="drinks" class="drinks" value="" />
+        <input type="hidden" name="pasta" id="pasta" class="pasta" value="" />
+        <input type="hidden" name="pastaCount" id="pastaCount" class="pastaCount" value="" />
+        <input type="hidden" name="drinksCount" id="drinksCount" class="drinksCount" value="" />
         <input type="hidden" name="pizzaCount" id="pizzaCount" class="pizzaCount" value="" />
         <div id="addToCart-modal-body">            
         </div>       
@@ -314,6 +318,9 @@
         $('.c-preloader').show();
         $.post('/getItems', {pizza:pizzacount,garlic:garliccount,drink:drinkcount,pasta:pastacount}, function(data){
             $('.c-preloader').hide();
+            $('.deals').val(pizza.pizzacount);
+            $('.pasta').val(pizza.pastacount);
+            $('.drinks').val(pizza.drinkcount);
             $('#addToCart-modal-body').html(data);           
         });
     }

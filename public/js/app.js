@@ -26571,9 +26571,61 @@
         let price=$('#price').val();
         let itemName=$('#itemName').val()
         let deals=$('#deals').val()
+        let drinks=$('#drinks').val()
+        let drinksCount=$('#drinksCount').val()
+        let pasta=$('#pasta').val()
+        let pastaCount=$('#pastaCount').val()
         let pizzaCount=$('#pizzaCount').val()
         let garlic = document.querySelector('#garlic_bread');
         let count = parseInt(deals)-parseInt(pizzaCount);
+        if(!pizzaCount || pizzaCount == 0){
+            new Noty({
+                type: 'error',
+                layout: 'topRight',
+                timeout: 1000,
+                theme: 'relax',
+                text: 'Add any '+deals+' Pizza',
+                progressBar: false
+              }).show();
+            return false;
+        }        
+        if(pizzaCount < deals){
+            new Noty({
+                type: 'error',
+                layout: 'topRight',
+                timeout: 1000,
+                theme: 'relax',
+                text: 'Add '+count+' more Pizza',
+                progressBar: false
+              }).show();
+            return false;
+        }
+        if(pasta >0){
+            if(pasta && !pastaCount || pastaCount ==0){
+                new Noty({
+                    type: 'error',
+                    layout: 'topRight',
+                    timeout: 1000,
+                    theme: 'relax',
+                    text: 'Add any '+pasta+' Pasta',
+                    progressBar: false
+                }).show();
+                return false;
+            }
+        }
+        if(drinks >0){
+            if(drinksCount<drinks){
+                new Noty({
+                    type: 'error',
+                    layout: 'topRight',
+                    timeout: 1000,
+                    theme: 'relax',
+                    text: 'Add any 1 drink',
+                    progressBar: false
+                }).show();
+                return false;
+            }
+        }
         if(deals == pizzaCount){
             if(garlic){
                 garlic = JSON.stringify(garlic.value);
