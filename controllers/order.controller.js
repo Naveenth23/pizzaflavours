@@ -46,10 +46,25 @@ function orderController(){
 					
 					if(productId.type === 'other'){
 						if (productId.item.toppings.length > 0) {				
-							let extraTopping = JSON.parse(productId.item.toppings);
-							for(let t of extraTopping) {
-								let test1 = t.split(',');
-								totalAmount +=parseFloat(test1[2]);
+							// let extraTopping = JSON.parse(productId.item.toppings);
+							// for(let t of extraTopping) {
+							// 	let test1 = t.split(',');
+							// 	totalAmount +=parseFloat(test1[2]);
+							// }
+							if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+								count= 1;
+								for(let t of JSON.parse(productId.item.toppings)) {
+									let test1 = t.split(',');
+									toppingPrice = count>3 ? test1[2] : 0;
+									totalAmount +=parseFloat(toppingPrice);
+									count++
+								}	
+							}else{		
+								//let extraTopping = JSON.parse(productId.item.toppings);
+								for(let t of JSON.parse(productId.item.toppings)) {
+									let test1 = t.split(',');
+									totalAmount +=parseFloat(test1[2]);
+								}
 							}
 						}
 						totalAmount = totalAmount + (productId.item.price * productId.qty);
@@ -200,11 +215,21 @@ function orderController(){
 					}
 					
 					if(productId.type === 'other'){
-						if (productId.item.toppings.length > 0) {				
-							let extraTopping = JSON.parse(productId.item.toppings);
-							for(let t of extraTopping) {
-								let test1 = t.split(',');
-								totalAmount +=parseFloat(test1[2]);
+						if (productId.item.toppings.length > 0) {
+							if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+								count= 1;
+								for(let t of JSON.parse(productId.item.toppings)) {
+									let test1 = t.split(',');
+									toppingPrice = count>3 ? test1[2] : 0;
+									totalAmount +=parseFloat(toppingPrice);
+									count++
+								}	
+							}else{		
+								//let extraTopping = JSON.parse(productId.item.toppings);
+								for(let t of JSON.parse(productId.item.toppings)) {
+									let test1 = t.split(',');
+									totalAmount +=parseFloat(test1[2]);
+								}
 							}
 						}
 						totalAmount = totalAmount + (productId.item.price * productId.qty);
@@ -224,6 +249,7 @@ function orderController(){
 				let userDocRef = firestore.collection('users').doc();
 				req.session.user_id = userDocRef.id
 				req.session.user = userDocRef.id;
+				req.session.userEmail = email;
 				req.session.order = {
 					orderType: order_type,
 				};
@@ -360,8 +386,24 @@ function orderController(){
 							orderItemEntity['creationDate'] = firebase1.firestore.FieldValue.serverTimestamp();
 							orderItemEntity['discount'] = '0';
 							orderItemEntity['documentId'] = 'eR8ZGMykz7PJdimiL3Pe';					
-							if (productId.item.toppings.length > 0) {				
-								orderItemEntity['extraTopping'] = JSON.parse(productId.item.toppings);
+							if (productId.item.toppings.length > 0) {
+								if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+									count= 1; index = 0; 
+									let toppings=[];
+									for(let topping of JSON.parse(productId.item.toppings)) {                                               
+										myarr = topping.split(","); 
+										if(count<=3){
+											myarr[2] = 0;
+										}    
+										
+										toppings.push(myarr.join(',').toString()); 
+										count++;
+										index++;	 
+									}
+									orderItemEntity['extraTopping'] = toppings;
+								}else{
+									orderItemEntity['extraTopping'] = JSON.parse(productId.item.toppings);
+								}
 							}else{
 								orderItemEntity['extraTopping'] = [];
 							}
