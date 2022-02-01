@@ -184,7 +184,7 @@
     $('body').delegate('.toppings','change',function(e){         
         topping = JSON.parse($(this).val());
         item = $('.itemName').val();
-        var halfDeal = item.includes("half & half"); 
+        var halfDeal = item.includes("Half ‘n’ Half Pizza"); 
         if(halfDeal){
             topping.price = topping.price/2;
         }

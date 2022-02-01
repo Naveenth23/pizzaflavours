@@ -535,7 +535,7 @@ const getCheckoutSuccess = async(req, res, next) => {
                     //         totalAmount +=parseFloat(test1[2]);
                     //     }
                     // }
-                    if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+                    if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA)')){	
                         count= 1;
                         for(let t of JSON.parse(productId.item.toppings)) {
                             let test1 = t.split(',');
@@ -655,7 +655,7 @@ const getCheckoutSuccess = async(req, res, next) => {
                 orderItemEntity['discount'] = '0';
                 orderItemEntity['documentId'] = 'eR8ZGMykz7PJdimiL3Pe';					
                 if (productId.item.toppings.length > 0) {				
-                    if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+                    if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA)')){	
                         count= 1; index = 0; 
                         let toppings=[];
                         for(let topping of JSON.parse(productId.item.toppings)) {                                               
