@@ -47,6 +47,7 @@ router.get('/customer/orders', orderController.index);
 router.get('/customer/orders/:id', orderController.show);
 
 router.get('/contact', shopController.contact);
+router.get('/privacy-policy', shopController.privacy);
 router.post('/booking', shopController.postBooking);
 router.post('/submitContact', shopController.postContact);
 

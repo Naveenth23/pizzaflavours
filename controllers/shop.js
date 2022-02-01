@@ -300,7 +300,10 @@ const specialDeals = async (req, res, next) => {
         let { cart } = req.session;
         let deals = JSON.parse(specialdeals.specialDeals);
         // let coke = JSON.parse(specialdeals.coke);
-        let garlic = JSON.parse(specialdeals.garlic);
+        let garlic ='';
+        if(specialdeals.garlic!=''){
+            garlic = JSON.parse(specialdeals.garlic);
+        }
         let t1 = JSON.parse(deals); 
         let price = parseFloat(specialdeals.price);
         let id = specialdeals.id;
@@ -315,8 +318,9 @@ const specialDeals = async (req, res, next) => {
             myJson = JSON.stringify({'id':element.id,'itemName':element.itemName, 'price':element.price, 'extraTopping':element.toppings, 'ingredients':element.newingredients});
             test32.push(myJson);
         });
-        
-        test32.push(garlic);
+        if(specialdeals.garlic!=''){
+            test32.push(garlic);
+        }
         var mydeal = {'id':specialdeals.id,'itemName':specialdeals.itemName, 'price':price,'deals':test32};
         if(!cart.items[id]) {
             cart.items[id] = {
@@ -433,6 +437,33 @@ const getCheckout = async(req, res, next) => {
 };
 
 const orderConfirm = async(req, res, next) => {
+    
+    console.log(req.session.userEmail);
+    const transporter = nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+            user: "2fc78e5f49f076",
+            pass: "8b3bb2cddd0377"
+        }
+    })
+    const mailOptions = {
+        from: req.session.userEmail,
+        to: req.session.userEmail,
+        subject: `Message from ${req.session.userEmail}:  Byfordpizza`,
+        html: `
+        <p>Thanks for ordering`
+    }
+
+    transporter.sendMail(mailOptions ,(error,info)=>{
+        if(error){
+            console.log(error);
+            res.send('error');
+        }else{
+            console.log('Email Sent'+info.response);
+            res.send('success');
+        }
+    })
     res.render('shop/confirm', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria Online Confirm', path: '/shop', name: '' })
 };
 
@@ -497,9 +528,23 @@ const getCheckoutSuccess = async(req, res, next) => {
                 }
                 
                 if(productId.type === 'other'){
-                    if (productId.item.toppings.length > 0) {				
-                        let extraTopping = JSON.parse(productId.item.toppings);
-                        for(let t of extraTopping) {
+                    // if (productId.item.toppings.length > 0) {				
+                    //     let extraTopping = JSON.parse(productId.item.toppings);
+                    //     for(let t of extraTopping) {
+                    //         let test1 = t.split(',');
+                    //         totalAmount +=parseFloat(test1[2]);
+                    //     }
+                    // }
+                    if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+                        count= 1;
+                        for(let t of JSON.parse(productId.item.toppings)) {
+                            let test1 = t.split(',');
+                            toppingPrice = count>3 ? test1[2] : 0;
+                            totalAmount +=parseFloat(toppingPrice);
+                            count++
+                        }	
+                    }else{
+                        for(let t of JSON.parse(productId.item.toppings)) {
                             let test1 = t.split(',');
                             totalAmount +=parseFloat(test1[2]);
                         }
@@ -610,7 +655,23 @@ const getCheckoutSuccess = async(req, res, next) => {
                 orderItemEntity['discount'] = '0';
                 orderItemEntity['documentId'] = 'eR8ZGMykz7PJdimiL3Pe';					
                 if (productId.item.toppings.length > 0) {				
-                    orderItemEntity['extraTopping'] = JSON.parse(productId.item.toppings);
+                    if(productId.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){	
+                        count= 1; index = 0; 
+                        let toppings=[];
+                        for(let topping of JSON.parse(productId.item.toppings)) {                                               
+                            myarr = topping.split(","); 
+                            if(count<=3){
+                                myarr[2] = 0;
+                            }    
+                            
+                            toppings.push(myarr.join(',').toString()); 
+                            count++;
+                            index++;	 
+                        }
+                        orderItemEntity['extraTopping'] = toppings;
+                    }else{
+                        orderItemEntity['extraTopping'] = JSON.parse(productId.item.toppings);
+                    }
                 }else{
                     orderItemEntity['extraTopping'] = [];
                 }
@@ -712,6 +773,10 @@ const contact = async(req, res, next) => {
     res.render('shop/contact', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria Online Contact', path: '/shop', name: '' })
 };
 
+const privacy = async(req, res, next) => {
+    res.render('shop/privacy', { pageTitle: 'Byford Pizzeria Privacy Policy', path: '/shop', name: '' })
+};
+
 const postContact = async (req, res, next) => {
     try {
         const {contact_name, contact_email,contact_phone,contact_message } = req.body;
@@ -789,6 +854,7 @@ module.exports = {
   orderConfirm,
   getInvoice,
   contact,
+  privacy,
   postBooking
 }
 

@@ -92,7 +92,7 @@
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-default">
                             Place Order
-                        </button>
+                        </button>                        
                     </div>
                 </form>
             </div>
@@ -140,13 +140,27 @@
                                     <% } %>
                                     <% if(pizza.item.hasOwnProperty('toppings')){ %>
                                         <% if(pizza.item.toppings.length > 0) { %>
-                                            <% for(let topping of JSON.parse(pizza.item.toppings)) { %>
-                                                <% var myarr = topping.split(","); %>
-                                                    <tr>
-                                                        <td class="cart_total_label"><%= myarr[0] %></td>
-                                                        <td class="cart_total_amount">$<%= myarr[2] %></td>
-                                                    </tr>
-                                                <% total = total + parseFloat(myarr[2]) %>
+                                            <% if(pizza.item.itemName.includes('CALZONE (ENCLOSED PIZZA')){ %>
+                                                <% count= 1; 
+                                                    for(let topping of JSON.parse(pizza.item.toppings)) { %>                                                
+                                                    <% var myarr = topping.split(","); 
+                                                        toppingPrice = count>3 ? myarr[2] : 0;
+                                                    %>
+                                                        <tr>
+                                                            <td class="cart_total_label"><%= myarr[0] %></td>
+                                                            <td class="cart_total_amount">$<%= count>3 ? myarr[2] : '0'  %></td>
+                                                        </tr>
+                                                    <% total = total + parseFloat(toppingPrice) %>
+                                                <% count++; } %>
+                                            <% }else { %>
+                                                <% for(let topping of JSON.parse(pizza.item.toppings)) { %>                                                
+                                                    <% var myarr = topping.split(","); %>
+                                                        <tr>
+                                                            <td class="cart_total_label"><%= myarr[0] %></td>
+                                                            <td class="cart_total_amount">$<%= myarr[2] %></td>
+                                                        </tr>
+                                                    <% total = total + parseFloat(myarr[2]) %>
+                                                <% } %>
                                             <% } %>
                                         <% } %>
                                     <% } %>
@@ -240,6 +254,7 @@
         }
         else
         {
+            $("#overlay").fadeIn(300);　
             document.getElementById("chk_option_error").style.visibility = "hidden";
         return true;
         }        
@@ -247,6 +262,7 @@
     
     setTimeout(function(){
     document.getElementById('delivery_error').style.visibility = 'hidden'; 
+    document.getElementById('chk_option_error').style.visibility = 'hidden'; 
     }, 2000);
 
     function toTitleCase(str) {
