@@ -8,7 +8,9 @@
             <table class="topping-table" class="pizza-special-deals">
                 <thead>
                     <% for (let pizza of pizzaItems) { 
-                    pizza.pizzacount = pizzacount   
+                    pizza.pizzacount = pizzacount
+                    pizza.drinkcount = drinkcount
+                    pizza.pastacount = pastacount
                     pizza.pid = i+'_'+pizza.id
                     pizza.newingredients = []
                     %>    
@@ -73,10 +75,12 @@
         </div>
         <div class="topping-items">
             <div class="table-responsive order_table">
-                <table class="topping-table">
+                <table class="topping-table pasta-list">
                     <thead>
                         <% for (let pasta of pastaItems) { 
-                            pasta.pastacount = pastacount  
+                            pasta.pastacount = pastacount 
+                            pasta.pizzacount = pizzacount
+                            pasta.drinkcount = drinkcount                     
                             pasta.pid = i+'_'+pasta.id 
                         %>    
                         <tr>
@@ -123,8 +127,11 @@
         <div class="table-responsive order_table">
             <table class="topping-table">
                 <thead>
-                    <% let i = 0; 
+                    <% let i = 1; 
                         for (let drink of drinkItems) { 
+                            drink.pastacount = pastacount 
+                            drink.pizzacount = pizzacount
+                            drink.drinkcount = drinkcount 
                             i++;
                         if(drink.itemName.includes('1.25L')){
                     %>
@@ -176,11 +183,11 @@
 
     $('body').delegate('.toppings','change',function(e){         
         topping = JSON.parse($(this).val());
-        // item = $('.itemName').val();
-        // // var halfDeal = item.includes("half & half"); 
-        // // if(halfDeal){
-        // //     topping.price = topping.price/2;
-        // // }
+        item = $('.itemName').val();
+        var halfDeal = item.includes("half & half"); 
+        if(halfDeal){
+            topping.price = topping.price/2;
+        }
 
         if ($(this).is(":checked")){        
             for (var i = 0; i < pizzaList.length; i++){
@@ -218,6 +225,8 @@
     pizza = JSON.parse(elem.value);
     pizza.pizzacount;
     $('#deals').val(pizza.pizzacount);
+    $('#drinks').val(pizza.drinkcount);
+    $('#pasta').val(pizza.pastacount);
     if (elem.checked) { //if checked, increment counter
         pizzaList.push(pizza);
         $('.specialList').val(JSON.stringify(pizzaList));
@@ -261,15 +270,19 @@
 
   function pastaChecker(elem) {
     pasta = JSON.parse(elem.value);
-    pasta.pastacount;
+    $('#pasta').val(pasta.pastacount);
+    $('#deals').val(pasta.pizzacount);
+    $('#drinks').val(pasta.drinkcount);
     if (elem.checked) { //if checked, increment counter
         pizzaList.push(pasta);
         $('.specialList').val(JSON.stringify(pizzaList));
       limit1++;
+      $('#pastaCount').val(limit1);
     } else {
         pizzaList.splice(pizzaList.findIndex(e => e.pid === pasta.id),1);
         console.log(pizzaList);
       limit1--; //else, decrement counter
+      $('#pastaCount').val(limit1);
     }
 
   
@@ -299,20 +312,21 @@
 
   function drinkChecker(elem) {
     drink = JSON.parse(elem.value);
+    $('#pasta').val(drink.pastacount);
+    $('#deals').val(drink.pizzacount);
+    $('#drinks').val(drink.drinkcount);
     if (elem.checked) {
       //if checked, increment counter
       pizzaList.push(drink);
       $(".specialList").val(JSON.stringify(pizzaList));
       limit1++;
+      $('#drinksCount').val(limit1);
     } else {
       pizzaList.splice(
-        pizzaList.findIndex((e) => e.pid === drink.id),
-        1
-      );
+        pizzaList.findIndex((e) => e.pid === drink.id),1);
       limit1--; //else, decrement counter
+      $('#drinksCount').val(limit1);
     }
-
-    console.log(pizzaList);
 
     for (i = 0; i < drinkChecks.length; i++) {
       // loop through all
