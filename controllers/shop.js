@@ -397,7 +397,6 @@ const getCheckout = async(req, res, next) => {
         }
         
         if(productId.type === 'other'){
-            console.log('test');
             if (productId.item.toppings.length > 0) {				
                 let extraTopping = JSON.parse(productId.item.toppings);
                 for(let t of extraTopping) {
@@ -472,6 +471,7 @@ const getCheckoutSuccess = async(req, res, next) => {
         const {name, mobileNumber, email, address,ordertype } = req.body;
         let userDocRef = firestore.collection('users').doc();
         req.session.user_id = userDocRef.id
+
         const ordersRef = firestore.collection('orders');
         const  id = req.session.user;
         const users = await firestore.collection('users').doc(id);
@@ -544,9 +544,12 @@ const getCheckoutSuccess = async(req, res, next) => {
                             count++
                         }	
                     }else{
-                        for(let t of JSON.parse(productId.item.toppings)) {
-                            let test1 = t.split(',');
-                            totalAmount +=parseFloat(test1[2]);
+                        if (productId.item.toppings.length > 0) {				
+                            let extraTopping = JSON.parse(productId.item.toppings);
+                            for(let t of extraTopping) {
+                                let test1 = t.split(',');
+                                totalAmount +=parseFloat(test1[2]);
+                            }
                         }
                     }
                     totalAmount = totalAmount + (productId.item.price * productId.qty);
