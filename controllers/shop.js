@@ -28,8 +28,8 @@ const getIndex = async (req, res, next) => {
 
 const getAllItems = async (req, res, next) => {
     try {
-        const items = await firestore.collection('items');
-        const deals = await firestore.collection('deals');
+        const items = await firestore.collection('items').where('isAvailable', '==', 'YES');
+        const deals = await firestore.collection('deals').where('isAvailable', '==', 'YES');
         const toppings = await firestore.collection('toppings');
         const toppingCategories = await firestore.collection('toppingCategories');
         const familyPack = await items.get();
@@ -437,7 +437,6 @@ const getCheckout = async(req, res, next) => {
 
 const orderConfirm = async(req, res, next) => {
     
-    console.log(req.session.userEmail);
     const transporter = nodemailer.createTransport({
         host: "smtp.mailtrap.io",
         port: 2525,
@@ -464,6 +463,15 @@ const orderConfirm = async(req, res, next) => {
         }
     })
     res.render('shop/confirm', { cart: Cart.getCart(), pageTitle: 'Byford Pizzeria Online Confirm', path: '/shop', name: '' })
+};
+
+const testStripe = async(req,res,next)=>{
+    let t2 = Object.values(req.body.data);
+    console.log(t2);
+    if(t2[0].payment_status === 'paid'){
+        console.log('test');
+    }
+
 };
 
 const getCheckoutSuccess = async(req, res, next) => {
@@ -858,6 +866,7 @@ module.exports = {
   getInvoice,
   contact,
   privacy,
+  testStripe,
   postBooking
 }
 
